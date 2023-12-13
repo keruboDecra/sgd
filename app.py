@@ -22,33 +22,17 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
+model_pipeline = joblib.load('sgd_classifier_model.joblib')
 
-# Load the SGD classifier and TF-IDF vectorizer
-sgd_classifier = joblib.load('sgd_classifier_model.joblib')
-tfidf_vectorizer = joblib.load('tfidf_vectorizer.joblib')
-
-# Function to clean and preprocess text
-def preprocess_text(text):
-    text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
-    text = text.lower()
-    stop_words = set(stopwords.words('english'))
-    lemmatizer = WordNetLemmatizer()
-    tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
-    return ' '.join(tokens)
-
-# Function for binary cyberbullying detection
-# Function for binary cyberbullying detection
 # Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Transform the preprocessed text using the loaded vectorizer
-        text_tfidf = tfidf_vectorizer.transform([preprocessed_text])
-
-        # Make prediction
-        prediction = sgd_classifier.predict(text_tfidf)
+        # Make prediction using the loaded pipeline
+        prediction = model_pipeline.predict([preprocessed_text])
 
         return prediction[0]
     except Exception as e:
