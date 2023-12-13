@@ -166,7 +166,6 @@ if user_input:
         predicted_class, prediction_probs = multi_class_result
         st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
         st.write(f"Multi-Class Predicted Class: {predicted_class}")
-        st.write(f"Decision Function Values: {prediction_probs}")
         st.markdown("</div>", unsafe_allow_html=True)
 
         # Check if classified as cyberbullying
