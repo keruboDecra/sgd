@@ -159,8 +159,7 @@ if user_input:
 
     # Display offensive words and provide recommendations
     if offensive_words and view_predictions:
-        st.warning("Offensive words detected! Please consider editing the following words:")
-        st.write(offensive_words)
+        st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -177,8 +176,7 @@ if user_input:
 
         # Check if classified as cyberbullying
         if predicted_class != 'not_cyberbullying':
-            class_feedback = get_class_feedback(predicted_class)
-            st.error(f"{class_feedback} Please edit your tweet before resending.")
+            st.error(f"{predicted_class.replace('_', ' ').title()}. Please edit your tweet before resending.")
         elif offensive_words and not view_predictions:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
