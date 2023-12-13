@@ -180,6 +180,9 @@ if user_input:
         elif offensive_words and not view_predictions:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
+            # Display message before sending
+            st.success('This tweet is safe to send.')
+
             # Button to send tweet
             if st.button('Send Tweet'):
-                st.success('Tweet Sent! This tweet is safe to send.')
+                st.success('Tweet Sent!')
