@@ -140,7 +140,7 @@ st.markdown(
 )
 
 # Streamlit UI
-st.image(logo, caption=None, width=40, use_column_width=True)
+st.image(logo, caption=None, width=10, use_column_width=True)
 st.title('Cyberbullying Detection App')
 
 # Input text box
