@@ -61,8 +61,6 @@ from nltk.stem import WordNetLemmatizer
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
 
-# Load the binary cyberbullying detection model
-binary_model = joblib.load('binary_cyberbullying_model.joblib')
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -99,12 +97,12 @@ def binary_cyberbullying_detection(text):
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Make prediction using the loaded model
-        prediction = binary_model.predict([preprocessed_text])
+        # Make prediction using the loaded pipeline
+        prediction = sgd_classifier.predict([preprocessed_text])
 
         return prediction[0]
     except Exception as e:
-        st.error(f"Error in binary_cyberbullying_detection: {e}")
+        st.error(f"Error: {e}")
         return None
 
 # Streamlit UI
