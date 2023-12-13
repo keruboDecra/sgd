@@ -117,11 +117,14 @@ st.markdown(
             border-radius: 5px;
         }
         .logo {
-            max-width: 100%;
+            max-width: 80%;
             margin-top: 20px;
         }
         h1 {
             color: #0077cc;
+        }
+        .stTextInput textarea {
+            color: #333333 !important;
         }
     </style>
     """,
@@ -133,7 +136,7 @@ st.title('Cyberbullying Detection App')
 st.image(logo, caption=None, width=200, use_column_width=True)
 
 # Input text box
-user_input = st.text_area("Compose your tweet:", "")
+user_input = st.text_area("Compose your tweet:", "", key="user_input")
 
 # Check if the user has entered any text
 if user_input:
