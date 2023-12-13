@@ -16,13 +16,9 @@ from sklearn.ensemble import RandomForestClassifier
 
 from nltk.stem import WordNetLemmatizer
 
-
-model = joblib.load('sgd_classifier_model.joblib')
-vectorizer = joblib.load('tfidf_vectorizer.joblib')
-
 import streamlit as st
-import joblib
 import re
+import joblib
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -50,8 +46,7 @@ def binary_cyberbullying_detection(text):
         text_tfidf = tfidf_vectorizer.transform([preprocessed_text])
 
         # Make prediction
-# Make prediction
-        prediction = sgd_classifier.predict(text_tfidf)[0]
+        prediction = sgd_classifier.predict(text_tfidf)
 
         return prediction[0]
     except Exception as e:
@@ -67,10 +62,12 @@ user_input = st.text_area("Enter a text:", "")
 # Check if the user has entered any text
 if user_input:
     # Make prediction
-    prediction = binary_cyberbullying_detection(user_input)
+    try:
+        prediction = binary_cyberbullying_detection(user_input)
 
-    # Display the prediction
-    if prediction is not None:
-        st.write(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
-
+        # Display the prediction
+        if prediction is not None:
+            st.write(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
+    except Exception as e:
+        st.error(f"Prediction error: {e}")
 
