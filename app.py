@@ -22,6 +22,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+
 # Load the SGD classifier and TF-IDF vectorizer
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
 tfidf_vectorizer = joblib.load('tfidf_vectorizer.joblib')
@@ -66,4 +67,3 @@ if user_input:
     # Display the prediction
     if prediction is not None:
         st.write(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
-
