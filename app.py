@@ -45,7 +45,7 @@ def binary_cyberbullying_detection(text, vectorizer, classifier):
         text_tfidf = vectorizer.transform([preprocessed_text])
 
         # Make prediction
-        prediction = classifier.predict(text_tfidf)
+        prediction = classifier.predict(text_tfidf, model)
 
         return prediction[0]
     except Exception as e:
