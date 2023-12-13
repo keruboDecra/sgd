@@ -1,4 +1,3 @@
-
 import streamlit as st
 import re
 import joblib
@@ -68,7 +67,7 @@ def multi_class_cyberbullying_detection(text):
 st.title('Cyberbullying Detection App')
 
 # Input text box
-user_input = st.text_area("Enter a text:", "")
+user_input = st.text_area("Enter a tweet:", "")
 
 # Check if the user has entered any text
 if user_input:
@@ -82,3 +81,11 @@ if user_input:
         predicted_class, prediction_probs = multi_class_result
         st.write(f"Multi-Class Predicted Class: {predicted_class}")
         st.write(f"Decision Function Values: {prediction_probs}")
+
+        # Check if classified as cyberbullying
+        if predicted_class != 'not_cyberbullying':
+            st.error("Cyberbullying detected! Please edit your tweet before resending.")
+        else:
+            # Button to send tweet
+            if st.button('Send Tweet'):
+                st.success('Tweet Sent!')
