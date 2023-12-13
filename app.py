@@ -178,6 +178,8 @@ if user_input:
         # Check if classified as cyberbullying
         if predicted_class != 'not_cyberbullying':
             st.error("Cyberbullying detected! Please edit your tweet before resending.")
+        elif offensive_words and not view_predictions:
+            st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
             # Button to send tweet
             if st.button('Send Tweet'):
