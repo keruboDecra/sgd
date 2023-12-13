@@ -117,7 +117,7 @@ st.markdown(
             border-radius: 5px;
         }
         .logo {
-            max-width: 80%;
+            max-width: 40%;
             margin-top: 20px;
         }
         h1 {
