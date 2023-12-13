@@ -176,8 +176,7 @@ if user_input:
 
         # Check if classified as cyberbullying
         if predicted_class != 'not_cyberbullying':
-            st.error(f"Please edit your tweet before resending, your text contains content that may appear as bullying to other users'. {predicted_class.replace('_', ' ').title()}.")
-
+            st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
         elif offensive_words and not view_predictions:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
