@@ -36,7 +36,8 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text, vectorizer, classifier):
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text, vectorizer, model):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
@@ -44,13 +45,21 @@ def binary_cyberbullying_detection(text, vectorizer, classifier):
         # Transform the preprocessed text using the loaded vectorizer
         text_tfidf = vectorizer.transform([preprocessed_text])
 
-        # Make prediction
-        prediction = classifier.predict(text_tfidf, sgd_classifier)
+        # Make prediction probability
+        probabilities = model.predict_proba(text_tfidf)
 
-        return prediction[0]
+        # Assuming class 1 is 'Cyberbullying' and class 0 is 'Not Cyberbullying'
+        prediction_probability = probabilities[0, 1]
+
+        # Set a threshold for binary classification
+        threshold = 0.5
+        prediction = 1 if prediction_probability >= threshold else 0
+
+        return prediction
     except Exception as e:
         st.error(f"Error: {e}")
         return None
+
 
 # Streamlit UI
 st.title('Cyberbullying Detection App')
