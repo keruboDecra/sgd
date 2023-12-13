@@ -39,7 +39,7 @@ def binary_cyberbullying_detection(text, model, vectorizer):
 
 # Example usage:
 user_input = "This is a tweet containing cyberbullying language."
-prediction = binary_cyberbullying_detection(user_input, sgd_classifier, tfidf_vectorizer)
+prediction = binary_cyberbullying_detection(user_input, model, vectorizer)
 
 if prediction is not None:
     print(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
