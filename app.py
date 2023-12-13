@@ -145,19 +145,20 @@ st.title('Cyberbullying Detection App')
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
+# View flag for detailed predictions
+view_predictions = st.checkbox("View Detailed Predictions", value=False)
+
 # Check if the user has entered any text
 if user_input:
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
-    if st.button("View Reasons"):
-        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-        st.write(f"Multi-Class Predicted Class: {predicted_class}")
+    st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
 
-        # Display offensive words and provide recommendations
-        if offensive_words:
-            st.warning("Offensive words detected! Please consider editing the following words:")
-            st.write(offensive_words)
+    # Display offensive words and provide recommendations
+    if offensive_words and view_predictions:
+        st.warning("Offensive words detected! Please consider editing the following words:")
+        st.write(offensive_words)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -166,10 +167,7 @@ if user_input:
     if multi_class_result is not None:
         predicted_class, prediction_probs = multi_class_result
         st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
-        if st.button("View Reasons"):
-            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-            st.write(f"Multi-Class Predicted Class: {predicted_class}")
-
+        st.write(f"Multi-Class Predicted Class: {predicted_class}")
         st.markdown("</div>", unsafe_allow_html=True)
 
         # Check if classified as cyberbullying
@@ -178,5 +176,4 @@ if user_input:
         else:
             # Button to send tweet
             if st.button('Send Tweet'):
-                st.success('Tweet Sent!')
-                st.info('This tweet is safe to send!')
+                st.success('Tweet Sent! This tweet is safe to send.')
