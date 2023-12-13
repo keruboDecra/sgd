@@ -179,6 +179,11 @@ if user_input:
         if predicted_class != 'not_cyberbullying':
             st.error("Cyberbullying detected! Please edit your tweet before resending.")
         else:
-            # Button to send tweet
-            if st.button('Send Tweet'):
-                st.success('Tweet Sent! This tweet is safe to send.')
+            # Check if Enter key is pressed (tweet is safe)
+            if st.session_state.enter_pressed:
+                st.success('This tweet is safe to send.')
+            else:
+                # Button to send tweet
+                if st.button('Send Tweet'):
+                    st.session_state.enter_pressed = False  # Reset session state
+                    st.success('Tweet Sent!')
