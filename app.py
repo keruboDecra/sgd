@@ -153,7 +153,9 @@ if user_input:
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
-    st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    
+    if view_predictions:
+        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
 
     # Display offensive words and provide recommendations
     if offensive_words and view_predictions:
@@ -167,7 +169,10 @@ if user_input:
     if multi_class_result is not None:
         predicted_class, prediction_probs = multi_class_result
         st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
-        st.write(f"Multi-Class Predicted Class: {predicted_class}")
+        
+        if view_predictions:
+            st.write(f"Multi-Class Predicted Class: {predicted_class}")
+
         st.markdown("</div>", unsafe_allow_html=True)
 
         # Check if classified as cyberbullying
