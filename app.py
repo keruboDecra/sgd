@@ -150,12 +150,14 @@ if user_input:
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
-    st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    if st.button("View Reasons"):
+        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+        st.write(f"Multi-Class Predicted Class: {predicted_class}")
 
-    # Display offensive words and provide recommendations
-    if offensive_words:
-        st.warning("Offensive words detected! Please consider editing the following words:")
-        st.write(offensive_words)
+        # Display offensive words and provide recommendations
+        if offensive_words:
+            st.warning("Offensive words detected! Please consider editing the following words:")
+            st.write(offensive_words)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -164,7 +166,10 @@ if user_input:
     if multi_class_result is not None:
         predicted_class, prediction_probs = multi_class_result
         st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
-        st.write(f"Multi-Class Predicted Class: {predicted_class}")
+        if st.button("View Reasons"):
+            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+            st.write(f"Multi-Class Predicted Class: {predicted_class}")
+
         st.markdown("</div>", unsafe_allow_html=True)
 
         # Check if classified as cyberbullying
@@ -174,3 +179,4 @@ if user_input:
             # Button to send tweet
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
+                st.info('This tweet is safe to send!')
