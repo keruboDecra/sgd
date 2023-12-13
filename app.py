@@ -143,7 +143,7 @@ st.image(logo, caption=None, width=10, use_column_width=True)
 st.title('Cyberbullying Detection App')
 
 # Input text box
-user_input = st.text_area("Compose your tweet:", "", key="user_input")
+user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
 # Check if the user has entered any text
 if user_input:
