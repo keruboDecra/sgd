@@ -35,6 +35,7 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
+# Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
@@ -43,10 +44,17 @@ def binary_cyberbullying_detection(text):
         # Make prediction using the loaded pipeline
         prediction = model_pipeline.predict([preprocessed_text])
 
-        return prediction[0]
+        # Check for offensive words
+        with open('en.txt', 'r') as f:
+            offensive_words = [line.strip() for line in f]
+
+        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
+
+        return prediction[0], offending_words
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
-        return None
+        return None, None
+
 
 # Function for multi-class cyberbullying detection
 def multi_class_cyberbullying_detection(text):
@@ -132,18 +140,24 @@ st.markdown(
 )
 
 # Streamlit UI
+st.image(logo, caption=None, width=40, use_column_width=True)
 st.title('Cyberbullying Detection App')
-st.image(logo, caption=None, width=200, use_column_width=True)
 
 # Input text box
 user_input = st.text_area("Compose your tweet:", "", key="user_input")
 
 # Check if the user has entered any text
 if user_input:
-    # Make binary prediction
-    binary_result = binary_cyberbullying_detection(user_input)
+    # Make binary prediction and check for offensive words
+    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
     st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+
+    # Display offensive words and provide recommendations
+    if offensive_words:
+        st.warning("Offensive words detected! Please consider editing the following words:")
+        st.write(offensive_words)
+
     st.markdown("</div>", unsafe_allow_html=True)
 
     # Make multi-class prediction
@@ -162,3 +176,4 @@ if user_input:
             # Button to send tweet
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
+
