@@ -87,6 +87,23 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
+
+        # Transform the preprocessed text using the loaded vectorizer
+        text_tfidf = tfidf_vectorizer.transform([preprocessed_text])
+
+        # Make binary prediction
+        binary_prediction = sgd_classifier.predict(text_tfidf)
+
+        return binary_prediction[0]
+    except Exception as e:
+        st.error(f"Error: {e}")
+        return None
+
 # Function for multi-class cyberbullying detection
 def multi_class_cyberbullying_detection(text):
     try:
@@ -115,12 +132,18 @@ user_input = st.text_area("Enter a text:", "")
 
 # Check if the user has entered any text
 if user_input:
-    # Make prediction
-    result = multi_class_cyberbullying_detection(user_input)
+    # Make binary prediction
+    binary_prediction = binary_cyberbullying_detection(user_input)
 
-    # Display the prediction
-    if result is not None:
-        predicted_class, prediction_probs = result
+    # Display the binary prediction
+    if binary_prediction is not None:
+        st.write(f"Binary Prediction: {'Cyberbullying' if binary_prediction == 1 else 'Not Cyberbullying'}")
+
+    # Make multiclass prediction
+    multi_class_result = multi_class_cyberbullying_detection(user_input)
+
+    # Display the multiclass prediction
+    if multi_class_result is not None:
+        predicted_class, prediction_probs = multi_class_result
         st.write(f"Predicted Class: {predicted_class}")
         st.write(f"Decision Function Values: {prediction_probs}")
-
