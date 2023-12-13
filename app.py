@@ -3,72 +3,16 @@ import streamlit as st
 import re
 import joblib
 import numpy as np
+import pandas as pd
 import nltk
 nltk.download('wordnet')
 # Download NLTK resources
 nltk.download('stopwords')
-
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 
-from nltk.stem import WordNetLemmatizer
-import streamlit as st
-import joblib
-import re
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-import streamlit as st
-import joblib
-import re
-import nltk
-import pandas as pd
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-# Download NLTK resources
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-import streamlit as st
-import joblib
-import re
-import nltk
-import numpy as np
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-
-import streamlit as st
-import joblib
-import re
-import numpy as np
-import nltk
-
-# Download NLTK resources
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-
-import streamlit as st
-import joblib
-import re
-import numpy as np
-import nltk
-
-# Download NLTK resources
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
 
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
