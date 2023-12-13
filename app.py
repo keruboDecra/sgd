@@ -70,6 +70,16 @@ import nltk
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+import streamlit as st
+import joblib
+import re
+import numpy as np
+import nltk
+
+# Download NLTK resources
+nltk.download('stopwords')
+nltk.download('wordnet')
+
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
@@ -87,39 +97,21 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
-# Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text):
+# Function for multi-class and binary cyberbullying detection
+def detect_cyberbullying(text, binary_threshold=0.5):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Transform the preprocessed text using the loaded vectorizer
-        text_tfidf = tfidf_vectorizer.transform([preprocessed_text])
-
-        # Make binary prediction
-        binary_prediction = sgd_classifier.predict(text_tfidf)
-
-        return binary_prediction[0]
-    except Exception as e:
-        st.error(f"Error: {e}")
-        return None
-
-# Function for multi-class cyberbullying detection
-def multi_class_cyberbullying_detection(text):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(text)
-
-        # Make prediction
-        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
-
-        # Get the predicted class index
+        # Make prediction on multi-class
+        decision_function_values = sgd_classifier.decision_function([preprocessed_text])
         predicted_class_index = np.argmax(decision_function_values)
-
-        # Get the predicted class label using the label encoder
         predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
 
-        return predicted_class_label, decision_function_values
+        # Make prediction on binary
+        binary_prediction = 1 if np.max(decision_function_values) > binary_threshold else 0
+
+        return predicted_class_label, decision_function_values, binary_prediction
     except Exception as e:
         st.error(f"Error: {e}")
         return None
@@ -132,18 +124,12 @@ user_input = st.text_area("Enter a text:", "")
 
 # Check if the user has entered any text
 if user_input:
-    # Make binary prediction
-    binary_prediction = binary_cyberbullying_detection(user_input)
+    # Make prediction
+    result = detect_cyberbullying(user_input)
 
-    # Display the binary prediction
-    if binary_prediction is not None:
-        st.write(f"Binary Prediction: {'Cyberbullying' if binary_prediction == 1 else 'Not Cyberbullying'}")
-
-    # Make multiclass prediction
-    multi_class_result = multi_class_cyberbullying_detection(user_input)
-
-    # Display the multiclass prediction
-    if multi_class_result is not None:
-        predicted_class, prediction_probs = multi_class_result
+    # Display the prediction
+    if result is not None:
+        predicted_class, decision_function_values, binary_prediction = result
         st.write(f"Predicted Class: {predicted_class}")
-        st.write(f"Decision Function Values: {prediction_probs}")
+        st.write(f"Decision Function Values: {decision_function_values}")
+        st.write(f"Binary Prediction: {'Cyberbullying' if binary_prediction == 1 else 'Not Cyberbullying'}")
