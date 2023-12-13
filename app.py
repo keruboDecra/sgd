@@ -4,14 +4,16 @@ import joblib
 import numpy as np
 import pandas as pd
 import nltk
-nltk.download('wordnet')
+from PIL import Image
+
 # Download NLTK resources
+nltk.download('wordnet')
 nltk.download('stopwords')
+
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
-
 
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
@@ -19,6 +21,9 @@ model_pipeline = joblib.load('sgd_classifier_model.joblib')
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
+
+# Load the logo image
+logo = Image.open('logo.png')
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -63,24 +68,89 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
+# Set page title and icon
+st.set_page_config(
+    page_title="Cyberbullying Detection App",
+    page_icon="🕵️",
+)
+
+# Apply styling
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+        .st-bw {
+            background-color: #ffffff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .st-bw:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .st-eb {
+            background-color: #e6f7ff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .st-eb:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .st-error {
+            background-color: #ffcccc;
+            color: #990000;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .st-success {
+            background-color: #ccffcc;
+            color: #006600;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .logo {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #0077cc;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Streamlit UI
 st.title('Cyberbullying Detection App')
+st.image(logo, caption=None, width=200, use_column_width=True)
 
 # Input text box
-user_input = st.text_area("Enter a tweet:", "")
+user_input = st.text_area("Compose your tweet:", "")
 
 # Check if the user has entered any text
 if user_input:
     # Make binary prediction
     binary_result = binary_cyberbullying_detection(user_input)
+    st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
     st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    st.markdown("</div>", unsafe_allow_html=True)
 
     # Make multi-class prediction
     multi_class_result = multi_class_cyberbullying_detection(user_input)
     if multi_class_result is not None:
         predicted_class, prediction_probs = multi_class_result
+        st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
         st.write(f"Multi-Class Predicted Class: {predicted_class}")
         st.write(f"Decision Function Values: {prediction_probs}")
+        st.markdown("</div>", unsafe_allow_html=True)
 
         # Check if classified as cyberbullying
         if predicted_class != 'not_cyberbullying':
