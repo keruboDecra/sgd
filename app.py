@@ -87,8 +87,8 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.pipeline import Pipeline
 
 # Load the entire pipeline
-model_pipeline = joblib.load('/content/drive/My Drive/sgb/sgd_classifier_model.joblib')
-label_encoder = joblib.load('/content/drive/My Drive/sgb/label_encoder.joblib')
+model_pipeline = joblib.load('sgd_classifier_model.joblib')
+label_encoder = joblib.load('label_encoder.joblib')
 
 # Function to clean and preprocess text
 def preprocess_text(text):
