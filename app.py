@@ -43,17 +43,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Download NLTK resources
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-import streamlit as st
-import joblib
-import re
-import nltk
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Download NLTK resources
 nltk.download('stopwords')
@@ -78,16 +67,15 @@ import numpy as np
 import nltk
 
 # Download NLTK resources
-nltk.download('wordnet')
-# Download NLTK stopwords
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-from sklearn.pipeline import Pipeline
 
-# Load the entire pipeline
-model_pipeline = joblib.load('sgd_classifier_model.joblib')
+# Load the SGD classifier and TF-IDF vectorizer
+sgd_classifier = joblib.load('sgd_classifier_model.joblib')
+tfidf_vectorizer = joblib.load('tfidf_vectorizer.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
 
 # Function to clean and preprocess text
@@ -106,15 +94,15 @@ def multi_class_cyberbullying_detection(text):
         preprocessed_text = preprocess_text(text)
 
         # Make prediction
-        prediction_probs = model_pipeline.predict_proba([preprocessed_text])[0]
+        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
 
         # Get the predicted class index
-        predicted_class_index = np.argmax(prediction_probs)
+        predicted_class_index = np.argmax(decision_function_values)
 
         # Get the predicted class label using the label encoder
         predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
 
-        return predicted_class_label, prediction_probs
+        return predicted_class_label, decision_function_values
     except Exception as e:
         st.error(f"Error: {e}")
         return None
@@ -128,10 +116,11 @@ user_input = st.text_area("Enter a text:", "")
 # Check if the user has entered any text
 if user_input:
     # Make prediction
-    predicted_class, prediction_probs = multi_class_cyberbullying_detection(user_input)
+    result = multi_class_cyberbullying_detection(user_input)
 
     # Display the prediction
-    if predicted_class is not None:
-        st.write(f"Predicted Category: {predicted_class}")
-        st.write(f"Binary Prediction: {'Cyberbullying' if 'cyberbullying' in predicted_class.lower() else 'Not Cyberbullying'}")
-        st.write(f"Prediction Probabilities: {prediction_probs}")
+    if result is not None:
+        predicted_class, prediction_probs = result
+        st.write(f"Predicted Class: {predicted_class}")
+        st.write(f"Decision Function Values: {prediction_probs}")
+
