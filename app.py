@@ -22,8 +22,29 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+import streamlit as st
+import joblib
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Download NLTK resources
+nltk.download('stopwords')
+nltk.download('wordnet')
+
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
+
+# Function to clean and preprocess text
+def preprocess_text(text):
+    text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
+    text = text.lower()
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
+    return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
@@ -53,3 +74,4 @@ if user_input:
     # Display the prediction
     if prediction is not None:
         st.write(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
+
