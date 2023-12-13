@@ -19,7 +19,6 @@ model_pipeline = joblib.load('sgd_classifier_model.joblib')
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
-tfidf_vectorizer = joblib.load('tfidf_vectorizer.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
 
 # Function to clean and preprocess text
