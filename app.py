@@ -36,30 +36,21 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
-# Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text, vectorizer, model):
+def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
         # Transform the preprocessed text using the loaded vectorizer
-        text_tfidf = vectorizer.transform([preprocessed_text])
+        text_tfidf = tfidf_vectorizer.transform([preprocessed_text])
 
-        # Make prediction probability
-        probabilities = model.predict_proba(text_tfidf)
+        # Make prediction
+        prediction = sgd_classifier.predict(text_tfidf)
 
-        # Assuming class 1 is 'Cyberbullying' and class 0 is 'Not Cyberbullying'
-        prediction_probability = probabilities[0, 1]
-
-        # Set a threshold for binary classification
-        threshold = 0.5
-        prediction = 1 if prediction_probability >= threshold else 0
-
-        return prediction
+        return prediction[0]
     except Exception as e:
         st.error(f"Error: {e}")
         return None
-
 
 # Streamlit UI
 st.title('Cyberbullying Detection App')
@@ -70,8 +61,9 @@ user_input = st.text_area("Enter a text:", "")
 # Check if the user has entered any text
 if user_input:
     # Make prediction
-    prediction = binary_cyberbullying_detection(user_input, tfidf_vectorizer, sgd_classifier)
+    prediction = binary_cyberbullying_detection(user_input)
 
     # Display the prediction
     if prediction is not None:
         st.write(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
+
