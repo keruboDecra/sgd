@@ -59,7 +59,6 @@ from nltk.stem import WordNetLemmatizer
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
-tfidf_vectorizer = joblib.load('tfidf_vectorizer.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the binary cyberbullying detection model
