@@ -71,9 +71,23 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
+import streamlit as st
+import joblib
+import re
+import numpy as np
+import nltk
+
+# Download NLTK resources
+nltk.download('wordnet')
+# Download NLTK stopwords
+nltk.download('stopwords')
+
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from sklearn.pipeline import Pipeline
+
+# Load the entire pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
-label_encoder = joblib.load('label_encoder.joblib')
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -84,19 +98,16 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
-# Function for detailed cyberbullying classification
-def detailed_cyberbullying_classification(text):
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Make prediction using the loaded pipeline
+        # Make prediction
         prediction = model_pipeline.predict([preprocessed_text])
 
-        # Decode the predicted label
-        predicted_label = label_encoder.inverse_transform(prediction)
-
-        return predicted_label[0]
+        return prediction[0]
     except Exception as e:
         st.error(f"Error: {e}")
         return None
@@ -110,13 +121,8 @@ user_input = st.text_area("Enter a text:", "")
 # Check if the user has entered any text
 if user_input:
     # Make prediction
-    prediction = detailed_cyberbullying_classification(user_input)
+    prediction = binary_cyberbullying_detection(user_input)
 
     # Display the prediction
     if prediction is not None:
-        st.write(f"Binary Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
-        
-        # Check if the prediction is Cyberbullying
-        if prediction == 1:
-            st.write("Specific Cyberbullying Category:", detailed_cyberbullying_classification(user_input))
-
+        st.write(f"Prediction: {'Cyberbullying' if prediction == 1 else 'Not Cyberbullying'}")
