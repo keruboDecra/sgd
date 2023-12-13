@@ -73,18 +73,22 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text):
+def cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Transform the preprocessed text using the loaded vectorizer
-        text_tfidf = tfidf_vectorizer_binary.transform([preprocessed_text])
+        # Make prediction using the loaded pipeline
+        prediction_encoded = model_pipeline.predict([preprocessed_text])
 
-        # Make prediction
-        prediction = sgd_classifier.predict(text_tfidf)
+        # Inverse transform to get the specific category
+        prediction = label_encoder.inverse_transform(prediction_encoded)
 
-        return prediction[0]
+        # Check if it's classified as cyberbullying
+        if prediction[0] != 'not_cyberbullying':
+            return prediction[0]
+        else:
+            return 'Not Cyberbullying'
     except Exception as e:
         st.error(f"Error: {e}")
         return None
