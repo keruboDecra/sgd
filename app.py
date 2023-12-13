@@ -57,10 +57,26 @@ nltk.download('wordnet')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+import streamlit as st
+import joblib
+import re
+import numpy as np
+import nltk
+
+# Download NLTK resources
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
+model_pipeline = joblib.load('sgd_classifier_model.joblib')
+
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
+tfidf_vectorizer = joblib.load('tfidf_vectorizer.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
-
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -71,6 +87,20 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
+
+        # Make prediction using the loaded pipeline
+        prediction = model_pipeline.predict([preprocessed_text])
+
+        return prediction[0]
+    except Exception as e:
+        st.error(f"Error in binary_cyberbullying_detection: {e}")
+        return None
+
 # Function for multi-class cyberbullying detection
 def multi_class_cyberbullying_detection(text):
     try:
@@ -78,7 +108,7 @@ def multi_class_cyberbullying_detection(text):
         preprocessed_text = preprocess_text(text)
 
         # Make prediction
-        decision_function_values = sgd_classifier.decision_function([preprocessed_text])
+        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
 
         # Get the predicted class index
         predicted_class_index = np.argmax(decision_function_values)
@@ -91,20 +121,6 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-# Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(text)
-
-        # Make prediction using the loaded pipeline
-        prediction = sgd_classifier.predict([preprocessed_text])
-
-        return prediction[0]
-    except Exception as e:
-        st.error(f"Error: {e}")
-        return None
-
 # Streamlit UI
 st.title('Cyberbullying Detection App')
 
@@ -113,18 +129,13 @@ user_input = st.text_area("Enter a text:", "")
 
 # Check if the user has entered any text
 if user_input:
-    # Make multi-class prediction
-    multi_class_result = multi_class_cyberbullying_detection(user_input)
-
     # Make binary prediction
     binary_result = binary_cyberbullying_detection(user_input)
+    st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
 
-    # Display the predictions
+    # Make multi-class prediction
+    multi_class_result = multi_class_cyberbullying_detection(user_input)
     if multi_class_result is not None:
-        predicted_class, decision_function_values = multi_class_result
+        predicted_class, prediction_probs = multi_class_result
         st.write(f"Multi-Class Predicted Class: {predicted_class}")
-        st.write(f"Decision Function Values: {decision_function_values}")
-
-    if binary_result is not None:
-        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-
+        st.write(f"Decision Function Values: {prediction_probs}")
