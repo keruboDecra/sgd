@@ -73,25 +73,30 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
-def cyberbullying_detection(text):
+# Function to predict using the loaded model
+def binary_cyberbullying_detection(text):
     try:
+        # Load the model and vectorizer
+        model = joblib.load('random_forest_model.joblib')
+        vectorizer = joblib.load('tfidf_vectorizer.joblib')
+
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Make prediction using the loaded pipeline
-        prediction_encoded = model_pipeline.predict([preprocessed_text])
+        # Transform the preprocessed text using the loaded vectorizer
+        text_tfidf = vectorizer.transform([preprocessed_text])
 
-        # Inverse transform to get the specific category
-        prediction = label_encoder.inverse_transform(prediction_encoded)
+        # Make prediction
+        prediction = model.predict(text_tfidf)
 
-        # Check if it's classified as cyberbullying
-        if prediction[0] != 'not_cyberbullying':
-            return prediction[0]
-        else:
-            return 'Not Cyberbullying'
-    except Exception as e:
-        st.error(f"Error: {e}")
+        return prediction[0]
+    except FileNotFoundError:
+        st.error("Model file not found. Make sure the model file exists.")
         return None
+    except Exception as e:
+        st.error(f"Error loading or using the model: {e}")
+        return None
+
 
 # Function for multi-class cyberbullying detection
 def multi_class_cyberbullying_detection(text):
