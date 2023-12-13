@@ -35,7 +35,6 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
-# Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
@@ -54,7 +53,6 @@ def binary_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
         return None, None
-
 
 # Function for multi-class cyberbullying detection
 def multi_class_cyberbullying_detection(text):
@@ -87,11 +85,12 @@ st.markdown(
     """
     <style>
         body {
-            background-color: #f5f5f5;
-            color: #333333;
+            background: linear-gradient(90deg, #5A5A5A 0%, #333333 100%);
+            color: #FFFFFF;
+            font-family: 'Arial', sans-serif;
         }
         .st-bw {
-            background-color: #ffffff;
+            background-color: #666666;
             padding: 15px;
             margin-top: 20px;
             border-radius: 10px;
@@ -101,7 +100,7 @@ st.markdown(
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
         .st-eb {
-            background-color: #e6f7ff;
+            background-color: #4C4C4C;
             padding: 15px;
             margin-top: 20px;
             border-radius: 10px;
@@ -111,25 +110,25 @@ st.markdown(
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
         .st-error {
-            background-color: #ffcccc;
+            background-color: #FF6666;
             color: #990000;
             padding: 10px;
             margin-top: 10px;
             border-radius: 5px;
         }
         .st-success {
-            background-color: #ccffcc;
+            background-color: #66FF66;
             color: #006600;
             padding: 10px;
             margin-top: 10px;
             border-radius: 5px;
         }
         .logo {
-            max-width: 40%;
+            max-width: 30%;
             margin-top: 20px;
         }
         h1 {
-            color: #0077cc;
+            color: #CC99FF;
         }
         .stTextInput textarea {
             color: #333333 !important;
@@ -175,4 +174,3 @@ if user_input:
             # Button to send tweet
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
-
