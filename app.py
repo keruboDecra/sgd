@@ -145,14 +145,11 @@ st.title('Cyberbullying Detection App')
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
-# Proceed button to trigger the analysis
-proceed_button = st.button("Proceed")
-
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
-# Check if the user has entered any text and clicked the "Proceed" button
-if user_input and proceed_button:
+# Check if the user has entered any text
+if user_input:
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
@@ -183,14 +180,9 @@ if user_input and proceed_button:
         elif offensive_words and not view_predictions:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
+            # Display message before sending
+            st.success('This tweet is safe to send.')
+
             # Button to send tweet
             if st.button('Send Tweet'):
-                st.success('This tweet is safe to send. Tweet Sent!')
-                # Clear session and reset input
-                st.experimental_session_state.user_input = ""
-                st.experimental_rerun()
-
-# Reset input and clear session on "Clear Session" button click
-if st.button("Clear Session"):
-    st.experimental_session_state.user_input = ""
-
+                st.success('Tweet Sent!')
