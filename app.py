@@ -85,7 +85,7 @@ def experiment_with_dataset():
         df_new = pd.read_csv(uploaded_file)
 
         # Create a new DataFrame for preprocessed data
-        df_preprocessed_new = df_new.copy()
+        df_preprocessed_again = df_new.copy()
 
         # Apply text preprocessing to the 'tweet_text' column
         df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
