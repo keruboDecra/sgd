@@ -27,7 +27,7 @@ logo = Image.open('logo.png')
 
 # Function to load the trained model pipeline
 def load_trained_model():
-    return joblib.load('/content/drive/My Drive/sgb/sgd_classifier_model.joblib')
+    return joblib.load('sgd_classifier_model.joblib')
 
 # Function for binary cyberbullying detection using the loaded model
 def binary_cyberbullying_detection_loaded_model(text, model):
