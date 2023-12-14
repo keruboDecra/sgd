@@ -159,7 +159,7 @@ if user_input:
 
     # Display offensive words and provide recommendations
     if offensive_words and view_predictions:
-        st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+        st.warning(f"Offensive language detected. Consider editing. Detected offensive words: {offensive_words}")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
