@@ -69,13 +69,41 @@ def multi_class_cyberbullying_detection(text):
 
 # Function to load custom dataset, preprocess, and train the model
 def experiment_with_dataset():
-    # Your code for loading and preprocessing the custom dataset
-    # ...
+    # Ask the user to upload a file
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
-    # Your code for training the model
-    # ...
+    if uploaded_file is not None:
+        # Load the new dataset
+        df_new = pd.read_csv(uploaded_file)
 
-    st.success("Experimentation completed. Model trained on custom dataset.")
+        # Create a new DataFrame for preprocessed data
+        df_preprocessed_new = df_new.copy()
+
+        # Apply text preprocessing to the 'tweet_text' column
+        df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+
+        # Encode the target variable using the saved label encoder
+        df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+
+        # Split the new data into training and testing sets
+        X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+            df_preprocessed_new['cleaned_text'],
+            df_preprocessed_new['encoded_label'],
+            test_size=0.2,
+            random_state=42
+        )
+
+        # Load the pre-trained pipeline
+        model_pipeline = joblib.load('sgd_classifier_model.joblib')
+
+        # Retrain the model on the new training data
+        model_pipeline.fit(X_train_new, y_train_new)
+
+        # Save the updated pipeline to the original file path
+        joblib.dump(model_pipeline, '/content/drive/My Drive/sgb/sgd_classifier_model.joblib', protocol=4)
+
+        # Optional: Print or return any relevant information
+        st.success("Dataset reprocessed and model retrained successfully.")
 
 # Set page title and icon
 st.set_page_config(
