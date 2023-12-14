@@ -148,11 +148,8 @@ user_input = st.text_area("Share your thoughts:", "", key="user_input")
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
-# Proceed button
-proceed_button = st.button("Proceed")
-
-# Check if the user has entered any text and clicked the Proceed button
-if user_input and proceed_button:
+# Check if the user has entered any text
+if user_input:
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
@@ -179,7 +176,7 @@ if user_input and proceed_button:
 
         # Check if classified as cyberbullying
         if predicted_class != 'not_cyberbullying':
-            st.error(f"This tweet is classified as {predicted_class.replace('_', ' ').title()}. Please edit your tweet before resending.")
+            st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
         elif offensive_words and not view_predictions:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
