@@ -74,15 +74,25 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 # Function to load custom dataset, preprocess, and train the model
+# ... (your imports)
+
+# Function to load custom dataset, preprocess, and train the model
 def experiment_with_dataset():
     print("Experiment function is executing!")
 
-    # Ask the user to upload a file
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    # Check if the dataset has been uploaded before
+    if 'uploaded_file' not in st.session_state:
+        # Ask the user to upload a file
+        uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
-    if uploaded_file is not None:
+        if uploaded_file is not None:
+            # Store the uploaded file in session_state
+            st.session_state.uploaded_file = uploaded_file
+
+    # Check if there's an uploaded file in session_state
+    if 'uploaded_file' in st.session_state:
         # Load the new dataset
-        df_new = pd.read_csv(uploaded_file)
+        df_new = pd.read_csv(st.session_state.uploaded_file)
 
         # Create a new DataFrame for preprocessed data
         df_preprocessed_new = df_new.copy()
@@ -109,6 +119,9 @@ def experiment_with_dataset():
 
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
+
+# ... (rest of your code)
+
 
 # Set page title and icon
 st.set_page_config(
