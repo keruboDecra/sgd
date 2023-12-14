@@ -74,12 +74,14 @@ def multi_class_cyberbullying_detection(text):
 
 # Function to load custom dataset, preprocess, and train the model
 def experiment_with_dataset():
-    print("Experiment function is executing!")
+    st.write("Experiment function is executing!")
 
     # Ask the user to upload a file
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
     if uploaded_file is not None:
+        st.write(f"File uploaded: {uploaded_file.name}")
+
         # Load the new dataset
         df_new = pd.read_csv(uploaded_file)
 
@@ -100,15 +102,19 @@ def experiment_with_dataset():
             random_state=42
         )
 
+        st.write("New dataset preprocessed.")
+
         # Retrain the model on the new training data
         model_pipeline.fit(X_train_new, y_train_new)
+
+        st.write("Model retrained.")
 
         # Save the updated pipeline to the original file path
         joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
-        # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
 
+# Rest of your code...
 
 
 # Set page title and icon
