@@ -194,5 +194,3 @@ if user_input and proceed_button:
 if st.button("Clear Session"):
     st.experimental_session_state.user_input = ""
 
-# Display user input
-st.write("User Input:", st.experimental_session_state.user_input)
