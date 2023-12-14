@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 # Download NLTK resources
 nltk.download('wordnet')
@@ -14,13 +16,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
-
-# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
-model_pipeline = joblib.load('sgd_classifier_model.joblib')
-
-# Load the SGD classifier, TF-IDF vectorizer, and label encoder
-sgd_classifier = joblib.load('sgd_classifier_model.joblib')
-label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the logo image
 logo = Image.open('logo.png')
@@ -142,11 +137,43 @@ st.markdown(
 st.image(logo, caption=None, width=10, use_column_width=True)
 st.title('Cyberbullying Detection App')
 
+# Upload a CSV file for training or prediction
+uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+
+if uploaded_file is not None:
+    st.write("File Uploaded Successfully!")
+
+    # Load the uploaded CSV file
+    uploaded_df = pd.read_csv(uploaded_file)
+
+    # Display the uploaded dataset
+    st.write("Uploaded Dataset:")
+    st.write(uploaded_df)
+
+    # Example: Split the data for training and testing
+    X_train, X_test, y_train, y_test = train_test_split(
+        uploaded_df['text'], uploaded_df['label'], test_size=0.2, random_state=42
+    )
+
+    # Example: Train a simple model (replace this with your actual training logic)
+    # model = YourModel()
+    # model.fit(X_train, y_train)
+
+    # Example: Make predictions on the test set
+    # predictions = model.predict(X_test)
+
+    # Example: Display accuracy score (replace this with your actual evaluation logic)
+    # accuracy = accuracy_score(y_test, predictions)
+    # st.write(f"Accuracy: {accuracy}")
+
+    # You can use the uploaded data for fine-tuning the model or making predictions as needed
+    # ...
+
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
 # Button to trigger analysis
-analyze_button = st.button("Proceed")
+analyze_button = st.button("Analyze")
 
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
@@ -179,13 +206,11 @@ if user_input and analyze_button:
 
         # Check if classified as cyberbullying
         if predicted_class != 'not_cyberbullying':
-            st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+            st.error(f"Please edit your tweet before resending, your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+
         elif offensive_words and not view_predictions:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
-            # Display message before sending
-            st.success('This tweet is safe to send.')
-
             # Button to send tweet
             if st.button('Send Tweet'):
-                st.success('Tweet Sent!')
+                st.success('Tweet Sent! This tweet is safe to send.')
