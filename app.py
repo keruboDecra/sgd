@@ -6,20 +6,21 @@ import pandas as pd
 import nltk
 from PIL import Image
 
-# Additional imports for experimentation
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.pipeline import make_pipeline
-from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import accuracy_score, classification_report
-
 # Download NLTK resources
 nltk.download('wordnet')
 nltk.download('stopwords')
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import RandomForestClassifier
+
+# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
+model_pipeline = joblib.load('sgd_classifier_model.joblib')
+
+# Load the SGD classifier, TF-IDF vectorizer, and label encoder
+sgd_classifier = joblib.load('sgd_classifier_model.joblib')
+label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the logo image
 logo = Image.open('logo.png')
@@ -141,26 +142,6 @@ st.markdown(
 st.image(logo, caption=None, width=10, use_column_width=True)
 st.title('Cyberbullying Detection App')
 
-# Sidebar for experimentation
-st.sidebar.title("Experimentation")
-experiment_button = st.sidebar.button("Experiment with Your Dataset")
-
-if experiment_button:
-    st.sidebar.header("Upload Your Dataset")
-    uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type="csv")
-
-    if uploaded_file is not None:
-        st.sidebar.header("Preview Your Dataset")
-        df_uploaded = pd.read_csv(uploaded_file)
-        st.sidebar.write(df_uploaded.head())
-
-        st.sidebar.header("Preprocess and Train Model")
-        X_train, X_test, y_train, y_test = preprocess_and_train(df_uploaded)
-        st.sidebar.success("Model trained successfully!")
-
-        st.sidebar.header("Evaluate Model")
-        evaluate_model(X_test, y_test)
-
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
@@ -208,3 +189,84 @@ if user_input and analyze_button:
             # Button to send tweet
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
+
+# Adding an "Experiment" button
+if st.button("Experiment"):
+    st.experimental_set_query_params(experiment=True)
+
+
+
+
+
+
+import streamlit as st
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import SGDClassifier
+from sklearn.pipeline import make_pipeline
+import joblib
+
+# Set page title and icon
+st.set_page_config(
+    page_title="Experimentation",
+    page_icon="⚗️",
+)
+
+# Upload CSV file for experimentation
+uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+
+# Check if a file is uploaded
+if uploaded_file:
+    st.info("File uploaded successfully!")
+
+    # Load the dataset
+    df = pd.read_csv(uploaded_file)
+
+    # Display the first few rows of the dataset
+    st.dataframe(df.head())
+
+    # Create a new DataFrame for preprocessed data
+    df_preprocessed = df.copy()
+
+    # Function to clean and preprocess text
+    def preprocess_text(text):
+        # Your preprocessing logic here
+        return text
+
+    # Apply text preprocessing to the 'tweet_text' column
+    df_preprocessed['cleaned_text'] = df_preprocessed['tweet_text'].apply(preprocess_text)
+
+    # Display the cleaned and preprocessed data
+    st.dataframe(df_preprocessed[['tweet_text', 'cleaned_text']].head())
+
+    # Encode the target variable
+    label_encoder = LabelEncoder()
+    df_preprocessed['encoded_label'] = label_encoder.fit_transform(df_preprocessed['cyberbullying_type'])
+
+    # Display the encoded labels
+    st.dataframe(df_preprocessed[['cyberbullying_type', 'encoded_label']].head())
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(
+        df_preprocessed['cleaned_text'],
+        df_preprocessed['encoded_label'],
+        test_size=0.2,
+        random_state=42
+    )
+
+    # Display the shapes of the training and testing sets
+    st.info(f"X_train shape: {X_train.shape}, y_train shape: {y_train.shape}")
+    st.info(f"X_test shape: {X_test.shape}, y_test shape: {y_test.shape}")
+
+    # Create a pipeline with TfidfVectorizer and SGDClassifier
+    model_pipeline_experiment = make_pipeline(TfidfVectorizer(), SGDClassifier(random_state=42))
+
+    # Train the model on the training data
+    model_pipeline_experiment.fit(X_train, y_train)
+
+    # Save the entire pipeline to a file
+    joblib.dump(model_pipeline_experiment, 'sgd_classifier_model_experiment.joblib', protocol=4)
+
+    st.success("Experimentation completed! Model saved as 'sgd_classifier_model_experiment.joblib'")
