@@ -20,6 +20,8 @@ logo = Image.open('logo.png')
 
 # Load the pre-trained pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
+sgd_classifier = joblib.load('sgd_classifier_model.joblib')
+label_encoder = joblib.load('label_encoder.joblib')
 
 # Function to clean and preprocess text
 def preprocess_text(text):
