@@ -77,6 +77,7 @@ def multi_class_cyberbullying_detection(text):
 # ... (your imports)
 
 # Function to load custom dataset, preprocess, and train the model
+@st.cache(allow_output_mutation=True)
 def experiment_with_dataset():
     print("Experiment function is executing!")
 
@@ -119,7 +120,6 @@ def experiment_with_dataset():
 
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
-
 # ... (rest of your code)
 
 
