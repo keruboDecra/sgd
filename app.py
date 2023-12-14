@@ -81,31 +81,25 @@ def multi_class_cyberbullying_detection(text):
 
 @st.cache(allow_output_mutation=True)
 def experiment_with_dataset():
-    print("Experiment function is executing!")
+    # Ask the user to upload a file
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    st.write("Experiment function is executing!")
 
-    # Initialize st.session_state if not already initialized
-    if 'uploaded_file' not in st.session_state:
-        st.session_state.uploaded_file = None
+    if uploaded_file is not None:
+        st.write(f"File uploaded: {uploaded_file.name}")
 
-    # Check if the dataset has been uploaded before
-    if st.session_state.uploaded_file is None:
-        # Ask the user to upload a file
-        uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-
-        if uploaded_file is not None:
-            # Store the uploaded file in session_state
-            st.session_state.uploaded_file = uploaded_file
-
-    # Check if there's an uploaded file in session_state
-    if st.session_state.uploaded_file is not None:
         # Load the new dataset
-        df_new = pd.read_csv(st.session_state.uploaded_file)
+        df_new = pd.read_csv(uploaded_file)
 
         # Create a new DataFrame for preprocessed data
         df_preprocessed_new = df_new.copy()
 
         # Apply text preprocessing to the 'tweet_text' column
         df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+
+        # Display the processed DataFrame
+        st.write("Processed DataFrame:")
+        st.write(df_preprocessed_new.head())
 
         # Encode the target variable using the saved label encoder
         df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
@@ -118,13 +112,16 @@ def experiment_with_dataset():
             random_state=42
         )
 
+        st.write("New dataset preprocessed.")
+
         # Retrain the model on the new training data
         model_pipeline.fit(X_train_new, y_train_new)
+
+        st.write("Model retrained.")
 
         # Save the updated pipeline to the original file path
         joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
-        # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
 
 
