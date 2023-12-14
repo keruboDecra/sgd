@@ -104,7 +104,7 @@ def experiment_with_dataset():
         model_pipeline.fit(X_train_new, y_train_new)
 
         # Save the updated pipeline to the original file path
-        joblib.dump(model_pipeline, '/content/drive/My Drive/sgb/sgd_classifier_model.joblib', protocol=4)
+        joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
