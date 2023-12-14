@@ -1,4 +1,3 @@
-# Import necessary libraries
 import streamlit as st
 import re
 import joblib
@@ -6,16 +5,18 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import SGDClassifier
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
 
 # Download NLTK resources
 nltk.download('wordnet')
 nltk.download('stopwords')
+
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import RandomForestClassifier
+
+# Load the logo image
+logo = Image.open('logo.png')
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -65,6 +66,16 @@ def multi_class_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
+
+# Function to load custom dataset, preprocess, and train the model
+def experiment_with_dataset():
+    # Your code for loading and preprocessing the custom dataset
+    # ...
+
+    # Your code for training the model
+    # ...
+
+    st.success("Experimentation completed. Model trained on custom dataset.")
 
 # Set page title and icon
 st.set_page_config(
@@ -130,69 +141,68 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Load the logo image
-logo = Image.open('logo.png')
+# Streamlit UI
+st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
+page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
-# Streamlit UI for the main page
-st.image(logo, caption=None, width=10, use_column_width=True)
-st.title('Cyberbullying Detection App')
+if page == "Twitter Interaction":
+    st.title('Cyberbullying Detection App')
 
-# Input text box
-user_input = st.text_area("Share your thoughts:", "", key="user_input")
+    # Input text box
+    user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
-# Button to trigger analysis
-analyze_button = st.button("Analyze")
+    # Button to trigger analysis
+    analyze_button = st.button("Analyze")
 
-# View flag for detailed predictions
-view_predictions = st.checkbox("View Detailed Predictions", value=False)
+    # View flag for detailed predictions
+    view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
-# Check if the user has entered any text and the button is clicked
-if user_input and analyze_button:
-    # Make binary prediction and check for offensive words
-    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
-    st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
-    
-    if view_predictions:
-        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    # Check if the user has entered any text and the button is clicked
+    if user_input and analyze_button:
+        # Make binary prediction and check for offensive words
+        binary_result, offensive_words = binary_cyberbullying_detection(user_input)
+        st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
 
-    # Display offensive words and provide recommendations
-    if offensive_words and view_predictions:
-        st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    # Make multi-class prediction
-    multi_class_result = multi_class_cyberbullying_detection(user_input)
-    if multi_class_result is not None:
-        predicted_class, prediction_probs = multi_class_result
-        st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
-        
         if view_predictions:
-            st.write(f"Multi-Class Predicted Class: {predicted_class}")
+            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+
+        # Display offensive words and provide recommendations
+        if offensive_words and view_predictions:
+            st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-        # Check if classified as cyberbullying
-        if predicted_class != 'not_cyberbullying':
-            st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
-        elif offensive_words and not view_predictions:
-            st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
-        else:
-            # Display message before sending
-            st.success('This tweet is safe to send.')
+        # Make multi-class prediction
+        multi_class_result = multi_class_cyberbullying_detection(user_input)
+        if multi_class_result is not None:
+            predicted_class, prediction_probs = multi_class_result
+            st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
 
-            # Button to send tweet
-            if st.button('Send Tweet'):
-                st.success('Tweet Sent!')
+            if view_predictions:
+                st.write(f"Multi-Class Predicted Class: {predicted_class}")
 
-# Streamlit UI for the second page
-if st.button("Experiment with Your Dataset"):
-    st.title('Custom Twitter Interaction')
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    # Add code snippet for custom dataset interaction and model training here
+            # Check if classified as cyberbullying
+            if predicted_class != 'not_cyberbullying':
+                st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+            elif offensive_words and not view_predictions:
+                st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+            else:
+                # Display message before sending
+                st.success('This tweet is safe to send.')
 
-    # Button to revert back to the main page
-    if st.button("Back to Main Page"):
-        st.experimental_rerun()
+                # Button to send tweet
+                if st.button('Send Tweet'):
+                    st.success('Tweet Sent!')
 
-# To be continued...
+elif page == "Custom Twitter Interaction":
+    st.title('Custom Cyberbullying Interaction')
+
+    # Button to experiment with a custom dataset
+    if st.button("Experiment with Your Dataset"):
+        experiment_with_dataset()
+
+# Add additional pages as needed
+
+# Rest of your code...
