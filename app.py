@@ -1,3 +1,4 @@
+
 import streamlit as st
 import re
 import joblib
@@ -74,15 +75,12 @@ def multi_class_cyberbullying_detection(text):
 
 # Function to load custom dataset, preprocess, and train the model
 def experiment_with_dataset():
+    print("Experiment function is executing!")
 
     # Ask the user to upload a file
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-    st.write("Experiment function is executing!")
 
     if uploaded_file is not None:
-        
-        st.write(f"File uploaded: {uploaded_file.name}")
-
         # Load the new dataset
         df_new = pd.read_csv(uploaded_file)
 
@@ -91,10 +89,6 @@ def experiment_with_dataset():
 
         # Apply text preprocessing to the 'tweet_text' column
         df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
-
-        # Display the processed DataFrame
-        st.write("Processed DataFrame:")
-        st.write(df_preprocessed_new.head())
 
         # Encode the target variable using the saved label encoder
         df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
@@ -107,25 +101,17 @@ def experiment_with_dataset():
             random_state=42
         )
 
-        st.write("New dataset preprocessed.")
-
         # Retrain the model on the new training data
         model_pipeline.fit(X_train_new, y_train_new)
-
-        st.write("Model retrained.")
 
         # Save the updated pipeline to the original file path
         joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
+        # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
 
 
-# Streamlit UI
-st.title('Custom Cyberbullying Interaction')
 
-# Button to experiment with a custom dataset
-if st.button("Experiment with Your Dataset"):
-    experiment_with_dataset()
 # Set page title and icon
 st.set_page_config(
     page_title="Cyberbullying Detection App",
