@@ -151,6 +151,10 @@ analyze_button = st.button("Analyze")
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
+# Button in the sidebar for experimentation
+if st.sidebar.button("Experiment with your own dataset"):
+    st.experimental_set_query_params(experiment=True)
+
 # Check if the user has entered any text and the button is clicked
 if user_input and analyze_button:
     # Make binary prediction and check for offensive words
