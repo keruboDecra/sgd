@@ -100,9 +100,6 @@ def experiment_with_dataset():
             random_state=42
         )
 
-        # Load the pre-trained pipeline
-        model_pipeline = joblib.load('/content/drive/My Drive/sgb/sgd_classifier_model.joblib')
-
         # Retrain the model on the new training data
         model_pipeline.fit(X_train_new, y_train_new)
 
