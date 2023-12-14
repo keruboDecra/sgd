@@ -1,4 +1,3 @@
-
 import streamlit as st
 import re
 import joblib
@@ -6,6 +5,7 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
+from sklearn.model_selection import train_test_split
 
 # Download NLTK resources
 nltk.download('wordnet')
@@ -75,46 +75,40 @@ def multi_class_cyberbullying_detection(text):
 
 # Function to load custom dataset, preprocess, and train the model
 def experiment_with_dataset():
-    try:
-        with st.spinner("Processing your dataset..."):
-            print("Experiment function is executing!")
+    print("Experiment function is executing!")
 
-            # Ask the user to upload a file
-            uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    # Ask the user to upload a file
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
-            if uploaded_file is not None:
-                # Load the new dataset
-                df_new = pd.read_csv(uploaded_file)
+    if uploaded_file is not None:
+        # Load the new dataset
+        df_new = pd.read_csv(uploaded_file)
 
-                # Create a new DataFrame for preprocessed data
-                df_preprocessed_new = df_new.copy()
+        # Create a new DataFrame for preprocessed data
+        df_preprocessed_new = df_new.copy()
 
-                # Apply text preprocessing to the 'tweet_text' column
-                df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+        # Apply text preprocessing to the 'tweet_text' column
+        df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
 
-                # Encode the target variable using the saved label encoder
-                df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+        # Encode the target variable using the saved label encoder
+        df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
 
-                # Split the new data into training and testing sets
-                X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
-                    df_preprocessed_new['cleaned_text'],
-                    df_preprocessed_new['encoded_label'],
-                    test_size=0.2,
-                    random_state=42
-                )
+        # Split the new data into training and testing sets
+        X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+            df_preprocessed_new['cleaned_text'],
+            df_preprocessed_new['encoded_label'],
+            test_size=0.2,
+            random_state=42
+        )
 
-                # Retrain the model on the new training data
-                model_pipeline.fit(X_train_new, y_train_new)
+        # Retrain the model on the new training data
+        model_pipeline.fit(X_train_new, y_train_new)
 
-                # Save the updated pipeline to the original file path
-                joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
+        # Save the updated pipeline to the original file path
+        joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
-                # Optional: Print or return any relevant information
-                st.success("Dataset reprocessed and model retrained successfully.")
-    except Exception as e:
-        st.error(f"Error in experiment_with_dataset: {e}")
-
-# Rest of your code...
+        # Optional: Print or return any relevant information
+        st.success("Dataset reprocessed and model retrained successfully.")
 
 # Set page title and icon
 st.set_page_config(
@@ -238,10 +232,10 @@ if page == "Twitter Interaction":
 elif page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
 
-    # Button to experiment with a custom dataset
-    if st.button("Experiment with Your Dataset"):
+    # Use st.session_state to check if the function has been executed
+    if 'experiment_executed' not in st.session_state:
+        # Execute the function immediately
         experiment_with_dataset()
 
-# Add additional pages as needed
-
-# Rest of your code...
+        # Mark the function as executed in session_state
+        st.session_state.experiment_executed = True
