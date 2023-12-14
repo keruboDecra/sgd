@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
-import time
 
 # Download NLTK resources
 nltk.download('wordnet')
@@ -147,7 +146,7 @@ st.title('Cyberbullying Detection App')
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
 # Button to trigger analysis
-analyze_button = st.button("Analyze")
+analyze_button = st.button("Proceed")
 
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
@@ -185,11 +184,8 @@ if user_input and analyze_button:
             st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
         else:
             # Display message before sending
-            success_message = st.success("This tweet is safe to send.")
-            time.sleep(2)  # Wait for 2 seconds
-            success_message.empty()  # Clear success message
+            st.success('This tweet is safe to send.')
 
             # Button to send tweet
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
-                st.text_input("Share your thoughts:", value="")  # Clear input
