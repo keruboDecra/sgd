@@ -18,6 +18,11 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Load the logo image
 logo = Image.open('logo.png')
+import streamlit as st
+
+# Initialize st.session_state if not already initialized
+if 'uploaded_file' not in st.session_state:
+    st.session_state.uploaded_file = None
 
 # Load the pre-trained pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
@@ -73,16 +78,17 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-# Function to load custom dataset, preprocess, and train the model
-# ... (your imports)
 
-# Function to load custom dataset, preprocess, and train the model
 @st.cache(allow_output_mutation=True)
 def experiment_with_dataset():
     print("Experiment function is executing!")
 
-    # Check if the dataset has been uploaded before
+    # Initialize st.session_state if not already initialized
     if 'uploaded_file' not in st.session_state:
+        st.session_state.uploaded_file = None
+
+    # Check if the dataset has been uploaded before
+    if st.session_state.uploaded_file is None:
         # Ask the user to upload a file
         uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
@@ -91,7 +97,7 @@ def experiment_with_dataset():
             st.session_state.uploaded_file = uploaded_file
 
     # Check if there's an uploaded file in session_state
-    if 'uploaded_file' in st.session_state:
+    if st.session_state.uploaded_file is not None:
         # Load the new dataset
         df_new = pd.read_csv(st.session_state.uploaded_file)
 
@@ -120,7 +126,6 @@ def experiment_with_dataset():
 
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
-# ... (rest of your code)
 
 
 # Set page title and icon
