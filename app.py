@@ -1,3 +1,4 @@
+# Import necessary libraries
 import streamlit as st
 import re
 import joblib
@@ -5,38 +6,34 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import SGDClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
 
 # Download NLTK resources
 nltk.download('wordnet')
 nltk.download('stopwords')
 
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
+# Function to clean and preprocess text
+def preprocess_text(text):
+    text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
+    text = text.lower()
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
+    return ' '.join(tokens)
 
-# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
-model_pipeline = joblib.load('sgd_classifier_model.joblib')
-
-# Load the SGD classifier, TF-IDF vectorizer, and label encoder
-sgd_classifier = joblib.load('sgd_classifier_model.joblib')
-label_encoder = joblib.load('label_encoder.joblib')
-
-# Load the logo image
-logo = Image.open('logo.png')
-
-# Function to load the trained model pipeline
-def load_trained_model():
-    return joblib.load('sgd_classifier_model.joblib')
-
-# Function for binary cyberbullying detection using the loaded model
-def binary_cyberbullying_detection_loaded_model(text, model):
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
         # Make prediction using the loaded pipeline
-        prediction = model.predict([preprocessed_text])
+        prediction = model_pipeline.predict([preprocessed_text])
 
         # Check for offensive words
         with open('en.txt', 'r') as f:
@@ -49,14 +46,14 @@ def binary_cyberbullying_detection_loaded_model(text, model):
         st.error(f"Error in binary_cyberbullying_detection: {e}")
         return None, None
 
-# Function for multi-class cyberbullying detection using the loaded model
-def multi_class_cyberbullying_detection_loaded_model(text, model):
+# Function for multi-class cyberbullying detection
+def multi_class_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
         # Make prediction
-        decision_function_values = model.decision_function([preprocessed_text])[0]
+        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
 
         # Get the predicted class index
         predicted_class_index = np.argmax(decision_function_values)
@@ -68,25 +65,6 @@ def multi_class_cyberbullying_detection_loaded_model(text, model):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
-
-# Function to preprocess and train the model with a custom dataset
-def preprocess_and_train_custom_dataset(file_path):
-    # Load the custom dataset
-    df = pd.read_csv(file_path)
-
-    # ... (Rest of the preprocessing and training code, as provided in your second code snippet)
-
-    # Return the trained model pipeline
-    return model_pipeline
-
-# Function to clean and preprocess text
-def preprocess_text(text):
-    text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
-    text = text.lower()
-    stop_words = set(stopwords.words('english'))
-    lemmatizer = WordNetLemmatizer()
-    tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
-    return ' '.join(tokens)
 
 # Set page title and icon
 st.set_page_config(
@@ -152,7 +130,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Streamlit UI
+# Load the logo image
+logo = Image.open('logo.png')
+
+# Streamlit UI for the main page
 st.image(logo, caption=None, width=10, use_column_width=True)
 st.title('Cyberbullying Detection App')
 
@@ -167,11 +148,8 @@ view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
 # Check if the user has entered any text and the button is clicked
 if user_input and analyze_button:
-    # Load the trained model pipeline
-    loaded_model = load_trained_model()
-
     # Make binary prediction and check for offensive words
-    binary_result, offensive_words = binary_cyberbullying_detection_loaded_model(user_input, loaded_model)
+    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
     
     if view_predictions:
@@ -184,7 +162,7 @@ if user_input and analyze_button:
     st.markdown("</div>", unsafe_allow_html=True)
 
     # Make multi-class prediction
-    multi_class_result = multi_class_cyberbullying_detection_loaded_model(user_input, loaded_model)
+    multi_class_result = multi_class_cyberbullying_detection(user_input)
     if multi_class_result is not None:
         predicted_class, prediction_probs = multi_class_result
         st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
@@ -207,10 +185,14 @@ if user_input and analyze_button:
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
 
-# Sidebar for custom dataset experiment
-st.sidebar.title("Custom Twitter Interaction")
-experiment_button = st.sidebar.button("Experiment with Your Dataset")
+# Streamlit UI for the second page
+if st.button("Experiment with Your Dataset"):
+    st.title('Custom Twitter Interaction')
 
-# Check if the experiment button is clicked
-if experiment_button:
-    st.sidebar.success("Custom Twitter Interaction will be implemented in the next version.")
+    # Add code snippet for custom dataset interaction and model training here
+
+    # Button to revert back to the main page
+    if st.button("Back to Main Page"):
+        st.experimental_rerun()
+
+# To be continued...
