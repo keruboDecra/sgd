@@ -5,15 +5,13 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
+
+# Additional imports for experimentation
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.svm import SVC
-from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score, classification_report
 
 # Download NLTK resources
@@ -143,62 +141,70 @@ st.markdown(
 st.image(logo, caption=None, width=10, use_column_width=True)
 st.title('Cyberbullying Detection App')
 
-# Experimentation page
-if st.button("Experiment"):
-    st.header("Experimentation Page")
-    st.write("Upload your CSV file for training and prediction.")
-    uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
+# Sidebar for experimentation
+st.sidebar.title("Experimentation")
+experiment_button = st.sidebar.button("Experiment with Your Dataset")
+
+if experiment_button:
+    st.sidebar.header("Upload Your Dataset")
+    uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type="csv")
 
     if uploaded_file is not None:
-        # Load the dataset
-        df_exp = pd.read_csv(uploaded_file)
+        st.sidebar.header("Preview Your Dataset")
+        df_uploaded = pd.read_csv(uploaded_file)
+        st.sidebar.write(df_uploaded.head())
 
-        # Display the first few rows of the dataset
-        st.write("First few rows of the uploaded dataset:")
-        st.write(df_exp.head())
+        st.sidebar.header("Preprocess and Train Model")
+        X_train, X_test, y_train, y_test = preprocess_and_train(df_uploaded)
+        st.sidebar.success("Model trained successfully!")
 
-        # Create a new DataFrame for preprocessed data
-        df_preprocessed_exp = df_exp.copy()
+        st.sidebar.header("Evaluate Model")
+        evaluate_model(X_test, y_test)
 
-        # Apply text preprocessing to the 'tweet_text' column
-        df_preprocessed_exp['cleaned_text'] = df_preprocessed_exp['tweet_text'].apply(preprocess_text)
+# Input text box
+user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
-        # Display the cleaned and preprocessed data
-        st.write("Cleaned and Preprocessed Data:")
-        st.write(df_preprocessed_exp[['tweet_text', 'cleaned_text']].head())
+# Button to trigger analysis
+analyze_button = st.button("Analyze")
 
-        # Encode the target variable
-        df_preprocessed_exp['encoded_label'] = label_encoder.transform(df_preprocessed_exp['cyberbullying_type'])
+# View flag for detailed predictions
+view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
-        # Display the encoded labels
-        st.write("Encoded Labels:")
-        st.write(df_preprocessed_exp[['cyberbullying_type', 'encoded_label']].head())
+# Check if the user has entered any text and the button is clicked
+if user_input and analyze_button:
+    # Make binary prediction and check for offensive words
+    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
+    st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
+    
+    if view_predictions:
+        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
 
-        # Split the data into training and testing sets
-        X_train_exp, X_test_exp, y_train_exp, y_test_exp = train_test_split(
-            df_preprocessed_exp['cleaned_text'],
-            df_preprocessed_exp['encoded_label'],
-            test_size=0.2,
-            random_state=42
-        )
+    # Display offensive words and provide recommendations
+    if offensive_words and view_predictions:
+        st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
-        # Display the shapes of the training and testing sets
-        st.write("Shapes of Training and Testing Sets:")
-        st.write(f"X_train shape: {X_train_exp.shape}, y_train shape: {y_train_exp.shape}")
-        st.write(f"X_test shape: {X_test_exp.shape}, y_test shape: {y_test_exp.shape}")
+    st.markdown("</div>", unsafe_allow_html=True)
 
-        # Train and evaluate each model on the user's dataset
-        for model_name, model in models.items():
-            # Train the model
-            model.fit(X_train_exp, y_train_exp)
+    # Make multi-class prediction
+    multi_class_result = multi_class_cyberbullying_detection(user_input)
+    if multi_class_result is not None:
+        predicted_class, prediction_probs = multi_class_result
+        st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
+        
+        if view_predictions:
+            st.write(f"Multi-Class Predicted Class: {predicted_class}")
 
-            # Make predictions on the test data
-            y_pred_exp = model.predict(X_test_exp)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-            # Evaluate the model
-            accuracy_exp = accuracy_score(y_test_exp, y_pred_exp)
-            st.write(f"\n{model_name} Accuracy on User's Dataset: {accuracy_exp:.2f}")
+        # Check if classified as cyberbullying
+        if predicted_class != 'not_cyberbullying':
+            st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+        elif offensive_words and not view_predictions:
+            st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+        else:
+            # Display message before sending
+            st.success('This tweet is safe to send.')
 
-            # Display additional evaluation metrics
-            st.write("Classification Report:")
-            st.write(classification_report(y_test_exp, y_pred_exp))
+            # Button to send tweet
+            if st.button('Send Tweet'):
+                st.success('Tweet Sent!')
