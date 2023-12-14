@@ -109,9 +109,7 @@ def experiment_with_dataset():
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
 
-# Example usage in Streamlit app
-if st.button("Reprocess and Retrain"):
-    preprocess_and_retrain()
+
 
 # Set page title and icon
 st.set_page_config(
