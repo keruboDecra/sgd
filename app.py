@@ -91,6 +91,10 @@ def experiment_with_dataset():
         # Apply text preprocessing to the 'tweet_text' column
         df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
 
+        # Display the processed DataFrame
+        st.write("Processed DataFrame:")
+        st.write(df_preprocessed_new.head())
+
         # Encode the target variable using the saved label encoder
         df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
 
