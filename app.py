@@ -36,8 +36,7 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
-# Function for binary cyberbullying detection
-# Function for binary cyberbullying detection
+
 # Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
     try:
@@ -61,10 +60,10 @@ def binary_cyberbullying_detection(text):
         # Display offensive words and provide recommendations
         if offending_words and view_predictions:
             st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offending_words}")
-
+    
         # Change text color based on prediction
-        color = 'green' if prediction[0] == 0 else 'red'
-        st.markdown(f"<div style='color: {color}; background-color: transparent;'>{result_text}</div>", unsafe_allow_html=True)
+        color = 'black' if prediction[0] == 0 else 'red'
+        st.markdown(f"<div style='color: {color};'>{result_text}</div>", unsafe_allow_html=True)
 
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
@@ -92,12 +91,11 @@ def multi_class_cyberbullying_detection(text):
 
         # Change text color based on prediction
         color = 'green' if predicted_class_label == 'not_cyberbullying' else 'red'
-        st.markdown(f"<div style='color: {color}; background-color: transparent;'>{result_text}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='color: {color};'>{result_text}</div>", unsafe_allow_html=True)
 
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
-
 
 
 
