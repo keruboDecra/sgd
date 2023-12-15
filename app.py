@@ -307,16 +307,10 @@ def twitter_interaction_page():
             else:
                 # Display message before sending
                 st.success('This tweet is safe to send.')
-
-    # Add a column for the message and button
-    col1, col2 = st.columns(2)
     
-    # In col1, display the message
-    col1.success('This tweet is safe to send.')
-    
-    # In col2, display the button
-    if col2.button('Send Tweet'):
-        col2.success('Tweet Sent!')
+                # Button to send tweet
+                if st.button('Send Tweet'):
+                    st.success('Tweet Sent!')
 
 def custom_twitter_interaction_page():
 
