@@ -1,4 +1,4 @@
-import streamlit as st
+I realize that when I want to see the detailed predictions after analyzing then I have to check the box then analyze again, Kindly adjust this to make sure that after analysis and I check to view the detailed predictions, I should see them without having to analyze again:: import streamlit as st
 import re
 import joblib
 import numpy as np
@@ -189,8 +189,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ...
-
 # Streamlit UI
 st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
@@ -206,9 +204,6 @@ if page == "Twitter Interaction":
 
     # View flag for detailed predictions
     view_predictions = st.checkbox("View Detailed Predictions", value=False)
-
-    # Create a placeholder to store the results after the first analysis
-    result_placeholder = st.empty()
 
     # Check if the user has entered any text and the button is clicked
     if user_input and analyze_button:
@@ -248,9 +243,6 @@ if page == "Twitter Interaction":
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
-
-        # Save the results in the placeholder
-        result_placeholder.text("Analysis completed.")
 
 elif page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
