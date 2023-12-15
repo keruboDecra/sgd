@@ -256,7 +256,7 @@ def twitter_interaction_page():
 
     # View flag for detailed predictions
     view_predictions = st.checkbox(
-        "View Flagging Reasons" if binary_result == 1 else "Review Text Quality", 
+        "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions", 
         value=False
     )
     
@@ -269,7 +269,7 @@ def twitter_interaction_page():
             st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
     
         # Display offensive words and provide recommendations
-        if offensive_words and view_predictions:
+        if offensive_words and (view_predictions or binary_result == 1):
             st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
     
         st.markdown("</div>", unsafe_allow_html=True)
@@ -297,6 +297,7 @@ def twitter_interaction_page():
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
+
 
 def custom_twitter_interaction_page():
 
