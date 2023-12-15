@@ -57,7 +57,6 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
-# Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
@@ -73,22 +72,19 @@ def binary_cyberbullying_detection(text):
             if predicted_class != 'not_cyberbullying':
                 return 1, None
 
-        # Make prediction using the loaded pipeline
-        prediction = model_pipeline.predict([preprocessed_text])
-
         # Check for offensive words
         with open('en.txt', 'r') as f:
-            offensive_words = [line.strip() for line in f]
+            offensive_words = set(line.strip() for line in f)
 
-        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
+        offending_words = [word for word in preprocessed_text.split() if word.lower() in offensive_words]
+
+        # Make prediction using the loaded pipeline
+        prediction = model_pipeline.predict([preprocessed_text])
 
         return prediction[0], offending_words
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
         return None, None
-
-
-
 
 
 
