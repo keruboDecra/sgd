@@ -244,7 +244,6 @@ st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
 
-
 def twitter_interaction_page():
     st.title('Cyberbullying Detection App')
 
@@ -269,7 +268,7 @@ def twitter_interaction_page():
             st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
     
         # Display offensive words and provide recommendations
-        if offensive_words and (view_predictions or binary_result == 1):
+        if offensive_words:
             st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
     
         st.markdown("</div>", unsafe_allow_html=True)
