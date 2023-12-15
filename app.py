@@ -239,7 +239,7 @@ st.markdown(
         }
 
         h1 {
-            color: #CC99FF;
+            color: blue;
         }
         .stTextInput textarea {
             color: #333333 !important;
@@ -312,32 +312,46 @@ def twitter_interaction_page():
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
 
-def custom_twitter_interaction_page():
 
+
+
+
+
+
+
+def custom_twitter_interaction_page():
     st.title('Custom Cyberbullying Interaction')
 
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
     experiment_with_dataset(uploaded_file)
-
     # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
     
+    # Make binary prediction and check for offensive words
+    binary_result, offensive_words = new_binary_cyberbullying_detection(user_input)
+
     # View flag for detailed predictions
-    view_predictions = st.checkbox("View Detailed Predictions", value=False)
+    view_predictions = st.checkbox(
+        "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions", 
+        value=False
+    )
     
     # Check if the user has entered any text
     if user_input:
-        # Make binary prediction and check for offensive words
-        binary_result, offensive_words = new_binary_cyberbullying_detection(user_input)
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
         
-        if view_predictions:
+        # Display binary prediction only if "View Flagging Reasons" is checked
+        if view_predictions and binary_result == 1:
             st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-    
-        # Display offensive words and provide recommendations
-        if offensive_words and view_predictions:
-            st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+        
+        # Check for offensive words and display warning
+        if offensive_words and (view_predictions or binary_result == 0):
+            # Adjust the warning message based on cyberbullying classification
+            if binary_result == 1:
+                st.warning(f"This tweet contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
+            else:
+                st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
     
         st.markdown("</div>", unsafe_allow_html=True)
     
@@ -354,7 +368,7 @@ def custom_twitter_interaction_page():
     
             # Check if classified as cyberbullying
             if predicted_class != 'not_cyberbullying':
-                st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+                st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
             elif offensive_words and not view_predictions:
                 st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
@@ -364,6 +378,81 @@ def custom_twitter_interaction_page():
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def custom_twitter_interaction_page():
+
+#     st.title('Custom Cyberbullying Interaction')
+
+#     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
+#     experiment_with_dataset(uploaded_file)
+
+#     # Input text box
+#     user_input = st.text_area("Share your thoughts:", "", key="user_input")
+    
+#     # View flag for detailed predictions
+#     view_predictions = st.checkbox("View Detailed Predictions", value=False)
+    
+#     # Check if the user has entered any text
+#     if user_input:
+#         # Make binary prediction and check for offensive words
+#         binary_result, offensive_words = new_binary_cyberbullying_detection(user_input)
+#         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
+        
+#         if view_predictions:
+#             st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    
+#         # Display offensive words and provide recommendations
+#         if offensive_words and view_predictions:
+#             st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+    
+#         st.markdown("</div>", unsafe_allow_html=True)
+    
+#         # Make multi-class prediction
+#         multi_class_result = new_multi_class_cyberbullying_detection(user_input)
+#         if multi_class_result is not None:
+#             predicted_class, prediction_probs = multi_class_result
+#             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
+            
+#             if view_predictions:
+#                 st.write(f"Multi-Class Predicted Class: {predicted_class}")
+    
+#             st.markdown("</div>", unsafe_allow_html=True)
+    
+#             # Check if classified as cyberbullying
+#             if predicted_class != 'not_cyberbullying':
+#                 st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+#             elif offensive_words and not view_predictions:
+#                 st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+#             else:
+#                 # Display message before sending
+#                 st.success('This tweet is safe to send.')
+    
+#                 # Button to send tweet
+#                 if st.button('Send Tweet'):
+#                     st.success('Tweet Sent!')
 
 
     
