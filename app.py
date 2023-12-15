@@ -81,7 +81,7 @@ def multi_class_cyberbullying_detection(text):
 
 
 
-def experiment_with_dataset(uploaded_file):
+def experiment_with_dataset():
     print("Experiment function is executing!")
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
