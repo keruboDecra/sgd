@@ -253,6 +253,8 @@ elif page == "Custom Twitter Interaction":
     # Button to experiment with a custom dataset
     if st.button("Experiment with Your Dataset"):
         uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+        df_new = pd.read_csv(uploaded_file)
+
         experiment_with_dataset(uploaded_file)
 
         # Mark the function as executed in session_state
