@@ -145,11 +145,14 @@ st.title('Cyberbullying Detection App')
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
+# Button to trigger analysis
+analyze_button = st.button("Analyze")
+
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
-# Check if the user has entered any text
-if user_input:
+# Check if the user has entered any text and the button is clicked
+if user_input and analyze_button:
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
     st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
