@@ -82,12 +82,7 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-@st.cache(allow_output_mutation=True)
-# Function to handle file upload and call the cached function
-def handle_file_upload():
-    # Ask the user to upload a file
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-    return uploaded_file
+
 
 @st.cache(allow_output_mutation=True)
 def experiment_with_dataset(uploaded_file):
@@ -257,7 +252,7 @@ elif page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
     # Button to experiment with a custom dataset
     if st.button("Experiment with Your Dataset"):
-        uploaded_file = handle_file_upload()
+        uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
         experiment_with_dataset(uploaded_file)
 
         # Mark the function as executed in session_state
