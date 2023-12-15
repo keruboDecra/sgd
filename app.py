@@ -140,7 +140,7 @@ def experiment_with_dataset(uploaded_file):
         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
         return new_model_pipeline  # Return the trained model
 
-# new_model_pipeline = experiment_with_dataset(uploaded_file)
+new_model_pipeline = experiment_with_dataset(uploaded_file)
 def new_binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
