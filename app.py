@@ -233,12 +233,10 @@ st.markdown(
             max-width: 30%;
             margin-top: 20px;
         }
-            <style>
         .stWarning {
             color: orange !important;
             background-color: transparent !important;
         }
-    </style>
 
         h1 {
             color: #CC99FF;
