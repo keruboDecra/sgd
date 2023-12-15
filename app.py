@@ -19,6 +19,7 @@ from sklearn.model_selection import train_test_split
 
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
+new_model_pipeline = experiment_with_dataset(uploaded_file)
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
