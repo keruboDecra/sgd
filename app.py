@@ -108,6 +108,7 @@ def experiment_with_dataset(uploaded_file):
         st.write("Preview of the uploaded data:")
         st.write(df_new.head())
 
+        st.write("Please wait as we train the model to your data...")
 
         # Create a new DataFrame for preprocessed data
         df_preprocessed_new = df_new.copy()
