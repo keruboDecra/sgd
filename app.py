@@ -77,11 +77,12 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
-# Streamlit UI
-st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
-page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
-
+# Set page title and icon
+st.set_page_config(
+    page_title="Cyberbullying Detection App",
+    page_icon="🕵️",
+)
 
 
 
@@ -167,11 +168,6 @@ def new_multi_class_cyberbullying_detection(text):
 
 
 
-# Set page title and icon
-st.set_page_config(
-    page_title="Cyberbullying Detection App",
-    page_icon="🕵️",
-)
 
 # Apply styling
 st.markdown(
@@ -231,6 +227,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# Streamlit UI
+st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
+page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
 
 
