@@ -20,6 +20,7 @@ from sklearn.model_selection import train_test_split
 
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
+new_model_pipeline = None
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
@@ -100,6 +101,8 @@ def multi_class_cyberbullying_detection(text):
 
 
 def experiment_with_dataset(uploaded_file):
+    global new_model_pipeline  # Use the global variable
+
     print("Experiment function is executing!")
 
     if uploaded_file is not None:
@@ -141,6 +144,8 @@ def experiment_with_dataset(uploaded_file):
         return new_model_pipeline  # Return the trained model
 
 def new_binary_cyberbullying_detection(text):
+    global new_model_pipeline  # Use the global variable
+
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
@@ -162,6 +167,8 @@ def new_binary_cyberbullying_detection(text):
 
 
 def new_multi_class_cyberbullying_detection(text):
+    global new_model_pipeline  # Use the global variable
+
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
