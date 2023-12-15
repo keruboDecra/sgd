@@ -19,7 +19,6 @@ from sklearn.model_selection import train_test_split
 
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
-new_model_pipeline = experiment_with_dataset(uploaded_file)
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
@@ -118,6 +117,7 @@ def experiment_with_dataset(uploaded_file):
         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
         return new_model_pipeline  # Return the trained model
 
+new_model_pipeline = experiment_with_dataset(uploaded_file)
 
 def new_binary_cyberbullying_detection(text):
     try:
