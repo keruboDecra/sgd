@@ -74,6 +74,8 @@ def multi_class_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
+
+
 def experiment_with_dataset(uploaded_file):
     print("Experiment function is executing!")
     if uploaded_file is not None:
@@ -106,7 +108,10 @@ def experiment_with_dataset(uploaded_file):
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed and model retrained successfully.")
 
-
+def custom_twitter_interaction_page():
+    st.title('Custom Cyberbullying Interaction')
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    experiment_with_dataset(uploaded_file)
 
 # Set page title and icon
 st.set_page_config(
@@ -179,12 +184,11 @@ page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter I
 
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
-if page == "Custom Twitter Interaction":
-    st.title('Custom Cyberbullying Interaction')
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-    
-    experiment_with_dataset(uploaded_file)
 
+
+
+if page == "Custom Twitter Interaction":
+    custom_twitter_interaction_page()
 
 
 # View flag for detailed predictions
