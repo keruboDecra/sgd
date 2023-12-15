@@ -88,7 +88,7 @@ st.set_page_config(
 
 def experiment_with_dataset():
     print("Experiment function is executing!")
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"], key="unique_key")
 
     if uploaded_file is not None:
         # Load the new dataset
