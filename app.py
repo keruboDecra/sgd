@@ -1,4 +1,4 @@
-I realize that when I want to see the detailed predictions after analyzing then I have to check the box then analyze again, Kindly adjust this to make sure that after analysis and I check to view the detailed predictions, I should see them without having to analyze again:: import streamlit as st
+import streamlit as st
 import re
 import joblib
 import numpy as np
@@ -18,11 +18,13 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Load the logo image
 logo = Image.open('logo.png')
-import streamlit as st
 
 # Initialize st.session_state if not already initialized
 if 'uploaded_file' not in st.session_state:
     st.session_state.uploaded_file = None
+
+if 'detailed_predictions' not in st.session_state:
+    st.session_state.detailed_predictions = False
 
 # Load the pre-trained pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
@@ -78,7 +80,6 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-
 @st.cache(allow_output_mutation=True)
 def experiment_with_dataset():
     # Ask the user to upload a file
@@ -123,7 +124,6 @@ def experiment_with_dataset():
         joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
         st.success("Dataset reprocessed and model retrained successfully.")
-
 
 # Set page title and icon
 st.set_page_config(
@@ -203,7 +203,7 @@ if page == "Twitter Interaction":
     analyze_button = st.button("Analyze")
 
     # View flag for detailed predictions
-    view_predictions = st.checkbox("View Detailed Predictions", value=False)
+    view_predictions = st.checkbox("View Detailed Predictions", value=st.session_state.detailed_predictions)
 
     # Check if the user has entered any text and the button is clicked
     if user_input and analyze_button:
@@ -243,6 +243,9 @@ if page == "Twitter Interaction":
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
+
+        # Update session state to remember detailed predictions preference
+        st.session_state.detailed_predictions = view_predictions
 
 elif page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
