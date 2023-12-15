@@ -77,6 +77,10 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
+
+
+
+
 def experiment_with_dataset(uploaded_file):
     print("Experiment function is executing!")
     if uploaded_file is not None:
@@ -111,6 +115,47 @@ def experiment_with_dataset(uploaded_file):
 
         # Optional: Print or return any relevant information
         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
+
+def new_binary_cyberbullying_detection(text):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
+
+        # Make prediction using the loaded pipeline
+        prediction = new_model_pipeline.predict([preprocessed_text])
+
+        # Check for offensive words
+        with open('en.txt', 'r') as f:
+            offensive_words = [line.strip() for line in f]
+
+        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
+
+        return prediction[0], offending_words
+    except Exception as e:
+        st.error(f"Error in binary_cyberbullying_detection: {e}")
+        return None, None
+
+
+
+def new_multi_class_cyberbullying_detection(text):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
+
+        # Make prediction
+        decision_function_values = new_model_pipeline.decision_function([preprocessed_text])[0]
+
+        # Get the predicted class index
+        predicted_class_index = np.argmax(decision_function_values)
+
+        # Get the predicted class label using the label encoder
+        predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
+
+        return predicted_class_label, decision_function_values
+    except Exception as e:
+        st.error(f"Error in multi_class_cyberbullying_detection: {e}")
+        return None
+
 
 
 
@@ -183,11 +228,6 @@ st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
 
-def custom_twitter_interaction_page():
-    st.title('Custom Cyberbullying Interaction')
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-    experiment_with_dataset(uploaded_file)
-
 
 
 
@@ -244,4 +284,63 @@ if page == "Twitter Interaction":
     twitter_interaction_page()
 elif page == "Custom Twitter Interaction":
     custom_twitter_interaction_page()
+
+
+
+def custom_twitter_interaction_page():
+    st.title('Custom Cyberbullying Interaction')
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    experiment_with_dataset(uploaded_file)
+
+    # Input text box
+    user_input = st.text_area("Share your thoughts:", "", key="user_input")
+    
+    # View flag for detailed predictions
+    view_predictions = st.checkbox("View Detailed Predictions", value=False)
+    
+    # Check if the user has entered any text
+    if user_input:
+        # Make binary prediction and check for offensive words
+        binary_result, offensive_words = new_binary_cyberbullying_detection(user_input)
+        st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
+        
+        if view_predictions:
+            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    
+        # Display offensive words and provide recommendations
+        if offensive_words and view_predictions:
+            st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+    
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+        # Make multi-class prediction
+        multi_class_result = new_multi_class_cyberbullying_detection(user_input)
+        if multi_class_result is not None:
+            predicted_class, prediction_probs = multi_class_result
+            st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
+            
+            if view_predictions:
+                st.write(f"Multi-Class Predicted Class: {predicted_class}")
+    
+            st.markdown("</div>", unsafe_allow_html=True)
+    
+            # Check if classified as cyberbullying
+            if predicted_class != 'not_cyberbullying':
+                st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
+            elif offensive_words and not view_predictions:
+                st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+            else:
+                # Display message before sending
+                st.success('This tweet is safe to send.')
+    
+                # Button to send tweet
+                if st.button('Send Tweet'):
+                    st.success('Tweet Sent!')
+    
+# Check the selected page and call the corresponding function
+if page == "Twitter Interaction":
+    twitter_interaction_page()
+elif page == "Custom Twitter Interaction":
+    custom_twitter_interaction_page()
+
 
