@@ -18,13 +18,14 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Load the logo image
 logo = Image.open('logo.png')
+import streamlit as st
 
 # Initialize st.session_state if not already initialized
 if 'uploaded_file' not in st.session_state:
     st.session_state.uploaded_file = None
 
-if 'detailed_predictions' not in st.session_state:
-    st.session_state.detailed_predictions = False
+if 'view_predictions' not in st.session_state:
+    st.session_state.view_predictions = False
 
 # Load the pre-trained pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
@@ -80,6 +81,7 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
+
 @st.cache(allow_output_mutation=True)
 def experiment_with_dataset():
     # Ask the user to upload a file
@@ -124,6 +126,7 @@ def experiment_with_dataset():
         joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
         st.success("Dataset reprocessed and model retrained successfully.")
+
 
 # Set page title and icon
 st.set_page_config(
@@ -172,7 +175,7 @@ st.markdown(
             color: #006600;
             padding: 10px;
             margin-top: 10px;
-            border-radius: 5px;
+            border-radius: 5px.
         }
         .logo {
             max-width: 30%;
@@ -203,7 +206,7 @@ if page == "Twitter Interaction":
     analyze_button = st.button("Analyze")
 
     # View flag for detailed predictions
-    view_predictions = st.checkbox("View Detailed Predictions", value=st.session_state.detailed_predictions)
+    st.session_state.view_predictions = st.checkbox("View Detailed Predictions", value=st.session_state.view_predictions)
 
     # Check if the user has entered any text and the button is clicked
     if user_input and analyze_button:
@@ -211,11 +214,11 @@ if page == "Twitter Interaction":
         binary_result, offensive_words = binary_cyberbullying_detection(user_input)
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
 
-        if view_predictions:
+        if st.session_state.view_predictions:
             st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
 
         # Display offensive words and provide recommendations
-        if offensive_words and view_predictions:
+        if offensive_words and st.session_state.view_predictions:
             st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
         st.markdown("</div>", unsafe_allow_html=True)
@@ -226,7 +229,7 @@ if page == "Twitter Interaction":
             predicted_class, prediction_probs = multi_class_result
             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
 
-            if view_predictions:
+            if st.session_state.view_predictions:
                 st.write(f"Multi-Class Predicted Class: {predicted_class}")
 
             st.markdown("</div>", unsafe_allow_html=True)
@@ -234,7 +237,7 @@ if page == "Twitter Interaction":
             # Check if classified as cyberbullying
             if predicted_class != 'not_cyberbullying':
                 st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
-            elif offensive_words and not view_predictions:
+            elif offensive_words and not st.session_state.view_predictions:
                 st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
                 # Display message before sending
@@ -243,9 +246,6 @@ if page == "Twitter Interaction":
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
-
-        # Update session state to remember detailed predictions preference
-        st.session_state.detailed_predictions = view_predictions
 
 elif page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
