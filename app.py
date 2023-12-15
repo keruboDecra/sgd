@@ -289,7 +289,7 @@ def custom_twitter_interaction_page():
 
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
-    experiment_with_dataset()
+    experiment_with_dataset(uploaded_file)
 
     # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
