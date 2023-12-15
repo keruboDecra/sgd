@@ -254,10 +254,7 @@ elif page == "Custom Twitter Interaction":
     # Button to experiment with a custom dataset
     if st.button("Experiment with Your Dataset"):
         experiment_with_dataset()
-    # Use st.session_state to check if the function has been executed
-    if 'experiment_executed' not in st.session_state:
-        # Execute the function immediately
-        experiment_with_dataset()
+ 
 
         # Mark the function as executed in session_state
         st.session_state.experiment_executed = True
