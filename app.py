@@ -156,7 +156,7 @@ def new_binary_cyberbullying_detection(text):
 
         return prediction[0], offending_words
     except Exception as e:
-        st.error(f"Error in binary_cyberbullying_detection: {e}")
+        st.error(f"Error in new_binary_cyberbullying_detection: {e}")
         return None, None
 
 
@@ -177,7 +177,7 @@ def new_multi_class_cyberbullying_detection(text):
 
         return predicted_class_label, decision_function_values
     except Exception as e:
-        st.error(f"Error in multi_class_cyberbullying_detection: {e}")
+        st.error(f"Error in new_multi_class_cyberbullying_detection: {e}")
         return None
 
 
