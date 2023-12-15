@@ -106,7 +106,7 @@ def experiment_with_dataset(uploaded_file):
         # Load the new dataset
         df_new = pd.read_csv(uploaded_file)
         st.write("Preview of the uploaded data:")
-        st.write(df.head())
+        st.write(df_new.head())
 
 
         # Create a new DataFrame for preprocessed data
