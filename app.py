@@ -77,6 +77,7 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
+uploaded_file = custom_twitter_interaction_page()
 
 
 
@@ -118,7 +119,6 @@ def experiment_with_dataset(uploaded_file):
         return new_model_pipeline  # Return the trained model
 
 new_model_pipeline = experiment_with_dataset(uploaded_file)
-
 def new_binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
