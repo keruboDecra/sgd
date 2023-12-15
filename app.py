@@ -145,7 +145,11 @@ page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter I
 
 # Input text box
 user_input = st.text_area("Share your thoughts:", "", key="user_input")
-
+if page == "Custom Twitter Interaction":
+    st.title('Custom Cyberbullying Interaction')
+# Button to experiment with a custom dataset
+if st.button("Experiment with Your Dataset"):
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
@@ -188,9 +192,5 @@ if user_input:
             if st.button('Send Tweet'):
                 st.success('Tweet Sent!')
 
-elif page == "Custom Twitter Interaction":
-    st.title('Custom Cyberbullying Interaction')
-# Button to experiment with a custom dataset
-if st.button("Experiment with Your Dataset"):
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
 
