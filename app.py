@@ -275,10 +275,9 @@ def twitter_interaction_page():
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
 
     # View flag for detailed predictions
-    view_predictions = st.checkbox(
-        "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions", 
-        value=False
-    )
+    view_flagging_reasons = binary_result == 1
+    view_label = "View Flagging Reasons" if view_flagging_reasons else "Review Tweet Quality"
+    view_predictions = st.checkbox(view_label, value=False)
     
     # Check if the user has entered any text
     if user_input:
@@ -341,7 +340,7 @@ def custom_twitter_interaction_page():
 
 
         view_flagging_reasons = binary_result == 1
-        view_label = "View Flagging Reasons" if view_flagging_reasons else "View Detailed Predictions"
+        view_label = "View Flagging Reasons" if view_flagging_reasons else "Review Tweet Quality"
         view_predictions = st.checkbox(view_label, value=False)
 
         # Check if the user has entered any text
