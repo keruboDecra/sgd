@@ -75,10 +75,6 @@ def multi_class_cyberbullying_detection(text):
         return None
 def experiment_with_dataset(uploaded_file):
     print("Experiment function is executing!")
-
-    # Ask the user to upload a file
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-
     if uploaded_file is not None:
         # Load the new dataset
         df_new = pd.read_csv(uploaded_file)
