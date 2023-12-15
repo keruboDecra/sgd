@@ -78,24 +78,15 @@ def multi_class_cyberbullying_detection(text):
 
 
 
-# Set page title and icon
-st.set_page_config(
-    page_title="Cyberbullying Detection App",
-    page_icon="🕵️",
-)
 
 
 
 def experiment_with_dataset():
     print("Experiment function is executing!")
-   
-    # Pass a unique key to st.file_uploader only if uploaded_file is not None
-    uploaded_file_key = None
+    st.title('Custom Cyberbullying Interaction')
+
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-    
-    if uploaded_file is not None:
-        uploaded_file_key = hash((id(uploaded_file), "file_uploader"))
-    
+
     if uploaded_file is not None:
         # Load the new dataset
         df_new = pd.read_csv(uploaded_file)
@@ -173,6 +164,11 @@ def new_multi_class_cyberbullying_detection(text):
 
 
 
+# Set page title and icon
+st.set_page_config(
+    page_title="Cyberbullying Detection App",
+    page_icon="🕵️",
+)
 
 
 # Apply styling
@@ -291,7 +287,6 @@ def twitter_interaction_page():
 
 
 def custom_twitter_interaction_page():
-    st.title('Custom Cyberbullying Interaction')
     experiment_with_dataset()
 
     # Input text box
