@@ -99,14 +99,17 @@ def experiment_with_dataset(uploaded_file):
             random_state=42
         )
 
-        # Retrain the model on the new training data
-        model_pipeline.fit(X_train_new, y_train_new)
+        # Create a new model pipeline
+        new_model_pipeline = original_model_pipeline.copy()  # Copy the original model
 
-        # Save the updated pipeline to the original file path
-        joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
+        # Retrain the new model on the new training data
+        new_model_pipeline.fit(X_train_new, y_train_new)
+
+        # Save the updated pipeline to a new file path
+        joblib.dump(new_model_pipeline, 'sgd_classifier_model_updated.joblib', protocol=4)
 
         # Optional: Print or return any relevant information
-        st.success("Dataset reprocessed and model retrained successfully.")
+        st.success("Dataset reprocessed, and a new model trained and saved successfully.")
 
 
 
