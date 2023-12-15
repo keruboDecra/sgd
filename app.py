@@ -239,7 +239,7 @@ st.markdown(
         }
 
         h1 {
-            color: #CC99FF;
+            color: #2CEEF0;
         }
         .stTextInput textarea {
             color: #333333 !important;
