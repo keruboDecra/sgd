@@ -189,7 +189,7 @@ if user_input:
                 st.success('Tweet Sent!')
 
     elif page == "Custom Twitter Interaction":
-    st.title('Custom Cyberbullying Interaction')
+        st.title('Custom Cyberbullying Interaction')
     # Button to experiment with a custom dataset
     if st.button("Experiment with Your Dataset"):
         uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
