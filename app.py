@@ -86,45 +86,77 @@ def multi_class_cyberbullying_detection(text):
 
 @st.cache(allow_output_mutation=True)
 def experiment_with_dataset(uploaded_file):
-    try:
-        print("Start of retrain_model")
+# Load the new dataset
+    df_new = pd.read_csv(uploaded_file)
 
-        if uploaded_file is not None:
-            st.write(f"File uploaded: {uploaded_file.name}")
+    # Create a new DataFrame for preprocessed data
+    df_preprocessed_new = df_new.copy()
 
-            # Load the new dataset
-            df_new = pd.read_csv(uploaded_file)
+    # Apply text preprocessing to the 'tweet_text' column
+    df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
 
-            # Create a new DataFrame for preprocessed data
-            df_preprocessed_new = df_new.copy()
+    # Encode the target variable using the saved label encoder
+    df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
 
-            # Apply text preprocessing to the 'tweet_text' column
-            df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+    # Split the new data into training and testing sets
+    X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+        df_preprocessed_new['cleaned_text'],
+        df_preprocessed_new['encoded_label'],
+        test_size=0.2,
+        random_state=42
+    )
 
-            # Encode the target variable using the saved label encoder
-            df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+    # Retrain the model on the new training data
+    model_pipeline.fit(X_train_new, y_train_new)
 
-            # Split the new data into training and testing sets
-            X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
-                df_preprocessed_new['cleaned_text'],
-                df_preprocessed_new['encoded_label'],
-                test_size=0.2,
-                random_state=42
-            )
+    # Save the updated pipeline to the original file path
+    joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
-            # Retrain the model on the new training data
-            model_pipeline.fit(X_train_new, y_train_new)
+    # Optional: Print or return any relevant information
+    st.success("Dataset reprocessed and model retrained successfully.")
 
-            # Save the updated pipeline to the original file path
-            joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
 
-            # Optional: Print or return any relevant information
-            st.success("Dataset reprocessed and model retrained successfully.")
+# @st.cache(allow_output_mutation=True)
+# def experiment_with_dataset(uploaded_file):
+#     try:
+#         print("Start of retrain_model")
 
-        print("End of retrain_model")
-    except Exception as e:
-        st.error(f"Error in retrain_model: {e}")
-        print(f"Error in retrain_model: {e}")
+#         if uploaded_file is not None:
+#             st.write(f"File uploaded: {uploaded_file.name}")
+
+#             # Load the new dataset
+#             df_new = pd.read_csv(uploaded_file)
+
+#             # Create a new DataFrame for preprocessed data
+#             df_preprocessed_new = df_new.copy()
+
+#             # Apply text preprocessing to the 'tweet_text' column
+#             df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+
+#             # Encode the target variable using the saved label encoder
+#             df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+
+#             # Split the new data into training and testing sets
+#             X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+#                 df_preprocessed_new['cleaned_text'],
+#                 df_preprocessed_new['encoded_label'],
+#                 test_size=0.2,
+#                 random_state=42
+#             )
+
+#             # Retrain the model on the new training data
+#             model_pipeline.fit(X_train_new, y_train_new)
+
+#             # Save the updated pipeline to the original file path
+#             joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
+
+#             # Optional: Print or return any relevant information
+#             st.success("Dataset reprocessed and model retrained successfully.")
+
+#         print("End of retrain_model")
+#     except Exception as e:
+#         st.error(f"Error in retrain_model: {e}")
+#         print(f"Error in retrain_model: {e}")
 
 # Set page title and icon
 st.set_page_config(
