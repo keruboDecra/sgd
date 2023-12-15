@@ -57,39 +57,46 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
+
+# Function for binary cyberbullying detection
 def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
-        # Make multi-class prediction
-        multi_class_result = multi_class_cyberbullying_detection(text)
-        if multi_class_result is not None:
-            predicted_class, _ = multi_class_result
-
-            # If the multiclass classifier doesn't classify the tweet as 'not_cyberbullying',
-            # consider it as cyberbullying in the binary classification
-            if predicted_class != 'not_cyberbullying':
-                return 1, None
+        # Make prediction using the loaded pipeline
+        prediction = model_pipeline.predict([preprocessed_text])
 
         # Check for offensive words
         with open('en.txt', 'r') as f:
-            offensive_words = set(line.strip() for line in f)
+            offensive_words = [line.strip() for line in f]
 
-        offending_words = [word for word in preprocessed_text.split() if word.lower() in offensive_words]
-
-        # Debugging statements
-        print("Offensive Words:", offending_words)
-        print("View Predictions:", view_predictions)
-        print("Binary Result:", binary_result)
-
-        # Make prediction using the loaded pipeline
-        prediction = model_pipeline.predict([preprocessed_text])
+        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
 
         return prediction[0], offending_words
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
         return None, None
+
+# Function for multi-class cyberbullying detection
+def multi_class_cyberbullying_detection(text):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
+
+        # Make prediction
+        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
+
+        # Get the predicted class index
+        predicted_class_index = np.argmax(decision_function_values)
+
+        # Get the predicted class label using the label encoder
+        predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
+
+        return predicted_class_label, decision_function_values
+    except Exception as e:
+        st.error(f"Error in multi_class_cyberbullying_detection: {e}")
+        return None
 
 
 def experiment_with_dataset(uploaded_file):
