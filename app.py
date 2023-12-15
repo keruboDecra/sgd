@@ -256,7 +256,7 @@ def twitter_interaction_page():
 
     # View flag for detailed predictions
     view_predictions = st.checkbox(
-        "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions", 
+        "View Flagging Reasons" if binary_result == 1 else "Review Text Quality", 
         value=False
     )
     
