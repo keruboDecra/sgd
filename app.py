@@ -89,10 +89,13 @@ st.set_page_config(
 def experiment_with_dataset():
     print("Experiment function is executing!")
    
+
+    # Dynamically generate a unique key based on some parameters
+    uploaded_file_key = hash((id(uploaded_file), "file_uploader"))
+    
     # Pass the unique key to st.file_uploader
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"], key=unique_key)
- # Dynamically generate a unique key based on some parameters
-    unique_key = hash((id(uploaded_file), "file_uploader"))
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"], key=uploaded_file_key)
+
     
     if uploaded_file is not None:
         # Load the new dataset
