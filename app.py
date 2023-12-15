@@ -73,6 +73,43 @@ def multi_class_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
+def experiment_with_dataset():
+    print("Experiment function is executing!")
+
+    # Ask the user to upload a file
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
+    if uploaded_file is not None:
+        # Load the new dataset
+        df_new = pd.read_csv(uploaded_file)
+
+        # Create a new DataFrame for preprocessed data
+        df_preprocessed_new = df_new.copy()
+
+        # Apply text preprocessing to the 'tweet_text' column
+        df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+
+        # Encode the target variable using the saved label encoder
+        df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+
+        # Split the new data into training and testing sets
+        X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+            df_preprocessed_new['cleaned_text'],
+            df_preprocessed_new['encoded_label'],
+            test_size=0.2,
+            random_state=42
+        )
+
+        # Retrain the model on the new training data
+        model_pipeline.fit(X_train_new, y_train_new)
+
+        # Save the updated pipeline to the original file path
+        joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
+
+        # Optional: Print or return any relevant information
+        st.success("Dataset reprocessed and model retrained successfully.")
+
+
 
 # Set page title and icon
 st.set_page_config(
@@ -148,6 +185,11 @@ user_input = st.text_area("Share your thoughts:", "", key="user_input")
 if page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    
+    experiment_with_dataset(uploaded_file)
+
+
+
 # View flag for detailed predictions
 view_predictions = st.checkbox("View Detailed Predictions", value=False)
 
