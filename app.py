@@ -251,17 +251,20 @@ def twitter_interaction_page():
     # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
     
+    # Make binary prediction and check for offensive words
+    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
+
     # View flag for detailed predictions
-    view_predictions = st.checkbox("View Detailed Predictions", value=False)
+    view_predictions = st.checkbox(
+        "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions", 
+        value=False
+    )
     
     # Check if the user has entered any text
     if user_input:
-        # Make binary prediction and check for offensive words
-        binary_result, offensive_words = binary_cyberbullying_detection(user_input)
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
         
-        if view_predictions:
-            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
     
         # Display offensive words and provide recommendations
         if offensive_words and view_predictions:
@@ -274,9 +277,6 @@ def twitter_interaction_page():
         if multi_class_result is not None:
             predicted_class, prediction_probs = multi_class_result
             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
-            
-            # Modify the label based on binary prediction
-            flagging_label = "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions"
             
             if view_predictions:
                 st.write(f"Multi-Class Predicted Class: {predicted_class}")
