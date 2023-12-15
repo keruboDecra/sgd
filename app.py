@@ -18,14 +18,15 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Load the logo image
 logo = Image.open('logo.png')
-import streamlit as st
 
-# Initialize st.session_state if not already initialized
-if 'uploaded_file' not in st.session_state:
-    st.session_state.uploaded_file = None
+# Define the SessionState class
+class SessionState:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
-if 'predictions' not in st.session_state:
-    st.session_state.predictions = {'binary_result': None, 'offensive_words': None, 'multi_class_result': None}
+# Create a session state object
+session_state = SessionState(predictions={'binary_result': None, 'offensive_words': None, 'multi_class_result': None})
 
 # Load the pre-trained pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
@@ -210,8 +211,8 @@ if page == "Twitter Interaction":
     if user_input and analyze_button:
         # Make binary prediction and check for offensive words
         binary_result, offensive_words = binary_cyberbullying_detection(user_input)
-        st.session_state.predictions['binary_result'] = binary_result
-        st.session_state.predictions['offensive_words'] = offensive_words
+        session_state.predictions['binary_result'] = binary_result
+        session_state.predictions['offensive_words'] = offensive_words
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
 
         if view_predictions:
@@ -225,7 +226,7 @@ if page == "Twitter Interaction":
 
         # Make multi-class prediction
         multi_class_result = multi_class_cyberbullying_detection(user_input)
-        st.session_state.predictions['multi_class_result'] = multi_class_result
+        session_state.predictions['multi_class_result'] = multi_class_result
         if multi_class_result is not None:
             predicted_class, prediction_probs = multi_class_result
             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
