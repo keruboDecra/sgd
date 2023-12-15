@@ -279,12 +279,6 @@ def twitter_interaction_page():
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
     
-# Check the selected page and call the corresponding function
-if page == "Twitter Interaction":
-    twitter_interaction_page()
-elif page == "Custom Twitter Interaction":
-    custom_twitter_interaction_page()
-
 
 
 def custom_twitter_interaction_page():
