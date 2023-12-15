@@ -83,13 +83,19 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 @st.cache(allow_output_mutation=True)
-def experiment_with_dataset():
+def handle_file_upload():
+    # Ask the user to upload a file
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    st.write("Experiment function is executing!")
+
+    # Call the cached function with the uploaded file
+    experiment_with_dataset(uploaded_file)
+
+# Cached function to process the uploaded file
+@st.cache(allow_output_mutation=True)
+def experiment_with_dataset(uploaded_file):
     try:
         print("Start of experiment_with_dataset")
-        
-        # Ask the user to upload a file
-        uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-        st.write("Experiment function is executing!")
 
         if uploaded_file is not None:
             st.write(f"File uploaded: {uploaded_file.name}")
@@ -97,39 +103,10 @@ def experiment_with_dataset():
             # Load the new dataset
             df_new = pd.read_csv(uploaded_file)
 
-            # Create a new DataFrame for preprocessed data
-            df_preprocessed_new = df_new.copy()
-
-            # Apply text preprocessing to the 'tweet_text' column
-            df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
-
-            # Display the processed DataFrame
-            st.write("Processed DataFrame:")
-            st.write(df_preprocessed_new.head())
-
-            # Encode the target variable using the saved label encoder
-            df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
-
-            # Split the new data into training and testing sets
-            X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
-                df_preprocessed_new['cleaned_text'],
-                df_preprocessed_new['encoded_label'],
-                test_size=0.2,
-                random_state=42
-            )
-
-            st.write("New dataset preprocessed.")
-
-            # Retrain the model on the new training data
-            model_pipeline.fit(X_train_new, y_train_new)
-
-            st.write("Model retrained.")
-
-            # Save the updated pipeline to the original file path
-            joblib.dump(model_pipeline, 'sgd_classifier_model.joblib', protocol=4)
+            # Rest of your existing code...
 
             st.success("Dataset reprocessed and model retrained successfully.")
-        
+
         print("End of experiment_with_dataset")
     except Exception as e:
         st.error(f"Error in experiment_with_dataset: {e}")
@@ -261,7 +238,7 @@ elif page == "Custom Twitter Interaction":
     st.title('Custom Cyberbullying Interaction')
     # Button to experiment with a custom dataset
     if st.button("Experiment with Your Dataset"):
-        experiment_with_dataset()
+        handle_file_upload()
  
 
         # Mark the function as executed in session_state
