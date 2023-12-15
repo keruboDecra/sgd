@@ -100,7 +100,7 @@ def experiment_with_dataset(uploaded_file):
         )
 
         # Create a new model pipeline
-        new_model_pipeline = original_model_pipeline.copy()  # Copy the original model
+        new_model_pipeline = model_pipeline.copy()  # Copy the original model
 
         # Retrain the new model on the new training data
         new_model_pipeline.fit(X_train_new, y_train_new)
