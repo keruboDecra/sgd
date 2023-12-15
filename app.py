@@ -83,6 +83,8 @@ def multi_class_cyberbullying_detection(text):
 
 def experiment_with_dataset(uploaded_file):
     print("Experiment function is executing!")
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
     if uploaded_file is not None:
         # Load the new dataset
         df_new = pd.read_csv(uploaded_file)
@@ -117,7 +119,7 @@ def experiment_with_dataset(uploaded_file):
         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
         return new_model_pipeline  # Return the trained model
 
-# new_model_pipeline = experiment_with_dataset(uploaded_file)
+new_model_pipeline = experiment_with_dataset()
 def new_binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
@@ -284,8 +286,7 @@ def twitter_interaction_page():
 
 def custom_twitter_interaction_page():
     st.title('Custom Cyberbullying Interaction')
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-    experiment_with_dataset(uploaded_file)
+    experiment_with_dataset()
 
     # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
