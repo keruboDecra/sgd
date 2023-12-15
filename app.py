@@ -270,9 +270,6 @@ def twitter_interaction_page():
         value=False
     )
     
-    # Display message before sending
-    st.success('This tweet is safe to send.')
-    
     # Check if the user has entered any text
     if user_input:
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
@@ -308,10 +305,18 @@ def twitter_interaction_page():
             elif offensive_words and not view_predictions:
                 st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
-                # Button to send tweet
-                if st.button('Send Tweet'):
-                    st.success('Tweet Sent!')
+                # Display message before sending
+                st.success('This tweet is safe to send.')
 
+    # Add a column for the message and button
+    col1, col2 = st.columns(2)
+    
+    # In col1, display the message
+    col1.success('This tweet is safe to send.')
+    
+    # In col2, display the button
+    if col2.button('Send Tweet'):
+        col2.success('Tweet Sent!')
 
 def custom_twitter_interaction_page():
 
