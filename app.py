@@ -77,7 +77,6 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
-uploaded_file = custom_twitter_interaction_page()
 
 
 
@@ -333,6 +332,7 @@ def custom_twitter_interaction_page():
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
 
+uploaded_file = custom_twitter_interaction_page()
 
     
 # Check the selected page and call the corresponding function
