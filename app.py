@@ -36,27 +36,6 @@ def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
-
-# Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(text)
-
-        # Make prediction using the loaded pipeline
-        prediction = model_pipeline.predict([preprocessed_text])
-
-        # Check for offensive words
-        with open('en.txt', 'r') as f:
-            offensive_words = [line.strip() for line in f]
-
-        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
-
-        return prediction[0], offending_words
-    except Exception as e:
-        st.error(f"Error in binary_cyberbullying_detection: {e}")
-        return None, None
-
 # Function for multi-class cyberbullying detection
 def multi_class_cyberbullying_detection(text):
     try:
@@ -76,6 +55,38 @@ def multi_class_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
+
+
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
+
+        # Make multi-class prediction
+        multi_class_result = multi_class_cyberbullying_detection(text)
+        if multi_class_result is not None:
+            predicted_class, _ = multi_class_result
+
+            # If the multiclass classifier doesn't classify the tweet as 'not_cyberbullying',
+            # consider it as cyberbullying in the binary classification
+            if predicted_class != 'not_cyberbullying':
+                return 1, None
+
+        # Make prediction using the loaded pipeline
+        prediction = model_pipeline.predict([preprocessed_text])
+
+        # Check for offensive words
+        with open('en.txt', 'r') as f:
+            offensive_words = [line.strip() for line in f]
+
+        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
+
+        return prediction[0], offending_words
+    except Exception as e:
+        st.error(f"Error in binary_cyberbullying_detection: {e}")
+        return None, None
+
 
 
 
