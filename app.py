@@ -84,7 +84,6 @@ def multi_class_cyberbullying_detection(text):
 
 
 
-@st.cache(allow_output_mutation=True)
 def experiment_with_dataset(uploaded_file):
 # Load the new dataset
     df_new = pd.read_csv(uploaded_file)
