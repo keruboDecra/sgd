@@ -196,7 +196,7 @@ st.markdown(
             font-family: 'Arial', sans-serif;
         }
         .st-bw {
-            background-color: #666666;
+            background-color: sage;
             padding: 15px;
             margin-top: 20px;
             border-radius: 10px;
