@@ -174,7 +174,7 @@ st.markdown(
     """
     <style>
         body {
-            background: linear-gradient(90deg, #5A5A5A 0%, #333333 100%);
+            background: linear-gradient(red, #5A5A5A 0%, #333333 100%);
             color: #FFFFFF;
             font-family: 'Arial', sans-serif;
         }
