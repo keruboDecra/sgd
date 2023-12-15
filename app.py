@@ -24,8 +24,8 @@ import streamlit as st
 if 'uploaded_file' not in st.session_state:
     st.session_state.uploaded_file = None
 
-if 'initial_analysis' not in st.session_state:
-    st.session_state.initial_analysis = None
+if 'predictions' not in st.session_state:
+    st.session_state.predictions = {'binary_result': None, 'offensive_words': None, 'multi_class_result': None}
 
 # Load the pre-trained pipeline
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
@@ -209,23 +209,23 @@ if page == "Twitter Interaction":
     # Check if the user has entered any text and the button is clicked
     if user_input and analyze_button:
         # Make binary prediction and check for offensive words
-        if st.session_state.initial_analysis is None:
-            binary_result, offensive_words = binary_cyberbullying_detection(user_input)
-            st.session_state.initial_analysis = {'binary_result': binary_result, 'offensive_words': offensive_words}
-
+        binary_result, offensive_words = binary_cyberbullying_detection(user_input)
+        st.session_state.predictions['binary_result'] = binary_result
+        st.session_state.predictions['offensive_words'] = offensive_words
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
 
         if view_predictions:
-            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if st.session_state.initial_analysis['binary_result'] == 1 else 'Not Cyberbullying'}")
+            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
 
         # Display offensive words and provide recommendations
-        if st.session_state.initial_analysis['offensive_words'] and view_predictions:
-            st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {st.session_state.initial_analysis['offensive_words']}")
+        if offensive_words and view_predictions:
+            st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
         # Make multi-class prediction
         multi_class_result = multi_class_cyberbullying_detection(user_input)
+        st.session_state.predictions['multi_class_result'] = multi_class_result
         if multi_class_result is not None:
             predicted_class, prediction_probs = multi_class_result
             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
@@ -238,7 +238,7 @@ if page == "Twitter Interaction":
             # Check if classified as cyberbullying
             if predicted_class != 'not_cyberbullying':
                 st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users. {predicted_class.replace('_', ' ').title()}.")
-            elif st.session_state.initial_analysis['offensive_words'] and not view_predictions:
+            elif offensive_words and not view_predictions:
                 st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
                 # Display message before sending
