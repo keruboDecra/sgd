@@ -175,7 +175,6 @@ st.markdown(
 )
 
 # Streamlit UI
-st.title('Cyberbullying Detection App')
 st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
@@ -189,6 +188,7 @@ def custom_twitter_interaction_page():
 
 
 def twitter_interaction_page():
+    st.title('Cyberbullying Detection App')
 
     # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
