@@ -26,7 +26,12 @@ label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the logo image
 logo = Image.open('logo.png')
+class State:
+    def __init__(self):
+        self.uploaded_file = None
 
+# Initialize the state
+state = State()
 # Function to clean and preprocess text
 def preprocess_text(text):
     text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
@@ -281,10 +286,19 @@ def twitter_interaction_page():
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
-    
-def custom_twitter_interaction_page():
+
+
+
+
+def custom_twitter_interaction_page(state):
     st.title('Custom Cyberbullying Interaction')
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
+    # Allow the user to upload a CSV file
+    state.uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
+    # Call the experiment function only if a file is uploaded
+    if state.uploaded_file:
+        experiment_with_dataset(state.uploaded_file)
     
     # Execute the experiment with the dataset
     new_model_pipeline = experiment_with_dataset(uploaded_file)
@@ -333,6 +347,7 @@ def custom_twitter_interaction_page():
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
+custom_twitter_interaction_page(state)
 
 
 
