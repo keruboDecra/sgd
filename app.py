@@ -73,7 +73,7 @@ def multi_class_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
-def experiment_with_dataset():
+def experiment_with_dataset(uploaded_file):
     print("Experiment function is executing!")
 
     # Ask the user to upload a file
