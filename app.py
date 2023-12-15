@@ -83,6 +83,7 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 @st.cache(allow_output_mutation=True)
+# Function to handle file upload and call the cached function
 def handle_file_upload():
     # Ask the user to upload a file
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
@@ -90,9 +91,6 @@ def handle_file_upload():
 
     # Call the cached function with the uploaded file
     experiment_with_dataset(uploaded_file)
-
-# Cached function to process the uploaded file
-@st.cache(allow_output_mutation=True)
 def experiment_with_dataset(uploaded_file):
     try:
         print("Start of experiment_with_dataset")
