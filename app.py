@@ -78,6 +78,11 @@ def binary_cyberbullying_detection(text):
 
         offending_words = [word for word in preprocessed_text.split() if word.lower() in offensive_words]
 
+        # Debugging statements
+        print("Offensive Words:", offending_words)
+        print("View Predictions:", view_predictions)
+        print("Binary Result:", binary_result)
+
         # Make prediction using the loaded pipeline
         prediction = model_pipeline.predict([preprocessed_text])
 
@@ -85,8 +90,6 @@ def binary_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
         return None, None
-
-
 
 
 def experiment_with_dataset(uploaded_file):
