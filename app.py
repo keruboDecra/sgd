@@ -252,7 +252,7 @@ def twitter_interaction_page():
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
     
     # View flag for detailed predictions
-    view_predictions = st.checkbox("View Flagging Reasons if Identified as Cyberbullying", value=False)
+    view_predictions = st.checkbox("View Detailed Predictions", value=False)
     
     # Check if the user has entered any text
     if user_input:
@@ -265,7 +265,7 @@ def twitter_interaction_page():
     
         # Display offensive words and provide recommendations
         if offensive_words and view_predictions:
-            st.warning(f"If identified as cyberbullying, consider editing. Detected offensive words: {offensive_words}")
+            st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
     
         st.markdown("</div>", unsafe_allow_html=True)
     
@@ -274,6 +274,9 @@ def twitter_interaction_page():
         if multi_class_result is not None:
             predicted_class, prediction_probs = multi_class_result
             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
+            
+            # Modify the label based on binary prediction
+            flagging_label = "View Flagging Reasons" if binary_result == 1 else "View Detailed Predictions"
             
             if view_predictions:
                 st.write(f"Multi-Class Predicted Class: {predicted_class}")
@@ -284,7 +287,7 @@ def twitter_interaction_page():
             if predicted_class != 'not_cyberbullying':
                 st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
             elif offensive_words and not view_predictions:
-                st.warning("If identified as cyberbullying, consider editing.")
+                st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
                 # Display message before sending
                 st.success('This tweet is safe to send.')
