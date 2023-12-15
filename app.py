@@ -320,7 +320,7 @@ def twitter_interaction_page():
 
 
 
-def custom_twitter_interaction_page():
+def custom_twitter_interaction_page(uploaded_file):
     st.title('Custom Cyberbullying Interaction')
 
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
@@ -382,6 +382,7 @@ def custom_twitter_interaction_page():
 
 
 
+uploaded_file = custom_twitter_interaction_page(uploaded_file)
 
 
 
