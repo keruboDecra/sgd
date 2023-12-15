@@ -77,6 +77,10 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
+# Streamlit UI
+st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
+page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
+
 
 
 
@@ -226,10 +230,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-# Streamlit UI
-st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
-page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
 
 
