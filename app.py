@@ -104,6 +104,7 @@ def multi_class_cyberbullying_detection(text):
 #     global new_model_pipeline  # Use the global variable
 
 #     print("Experiment function is executing!")
+#     try:
 
 #     if uploaded_file is not None:
 #         # Load the new dataset
@@ -142,6 +143,9 @@ def multi_class_cyberbullying_detection(text):
 #         # Optional: Print or return any relevant information
 #         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
 #         return new_model_pipeline  # Return the trained model
+
+#     except Exception as e:
+#         st.error(f"Training failed. Check your dataset and try again. Error: {e}")
 
 
 def experiment_with_dataset(uploaded_file):
@@ -190,7 +194,6 @@ def experiment_with_dataset(uploaded_file):
 
     except Exception as e:
         st.error(f"Training failed. Check your dataset and try again. Error: {e}")
-        return None  # Return None to indicate failure
 
 def new_binary_cyberbullying_detection(text):
     global new_model_pipeline  # Use the global variable
