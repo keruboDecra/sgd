@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
+import sys  # Import the sys module
 
 # Download NLTK resources
 nltk.download('wordnet')
@@ -194,7 +195,7 @@ def experiment_with_dataset(uploaded_file):
 
     except Exception as e:
         st.error(f"Training failed. Check your dataset and try again. Error: {e}")
-
+        sys.exit()
 def new_binary_cyberbullying_detection(text):
     global new_model_pipeline  # Use the global variable
 
