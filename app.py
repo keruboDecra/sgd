@@ -323,14 +323,6 @@ def twitter_interaction_page():
 
         # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
-
-    # Detect the language of the input
-    detected_language = detect(user_input)
-
-    # Check if the detected language is English
-    if detected_language != 'en':
-        st.warning("The model is only trained in English and cannot process other languages. Please enter text in English.")
-        return
     
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
