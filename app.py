@@ -194,7 +194,7 @@ def experiment_with_dataset(uploaded_file):
             return new_model_pipeline  # Return the trained model
 
     except Exception as e:
-        st.error(f"Training failed. Check your dataset and try again. Error: {e}")
+        st.error(f"Training failed, dataset structure incompatible. Check your dataset and try again. Error: {e}")
         sys.exit()
 def new_binary_cyberbullying_detection(text):
     global new_model_pipeline  # Use the global variable
