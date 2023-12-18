@@ -7,7 +7,6 @@ import pandas as pd
 import nltk
 from PIL import Image
 import sys  # Import the sys module
-import langid
 
 # Download NLTK resources
 nltk.download('wordnet')
