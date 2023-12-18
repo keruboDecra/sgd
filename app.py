@@ -100,48 +100,97 @@ def multi_class_cyberbullying_detection(text):
         return None
 
 
+# def experiment_with_dataset(uploaded_file):
+#     global new_model_pipeline  # Use the global variable
+
+#     print("Experiment function is executing!")
+
+#     if uploaded_file is not None:
+#         # Load the new dataset
+#         df_new = pd.read_csv(uploaded_file)
+#         st.write("Preview of the uploaded data:")
+#         st.write(df_new.head())
+
+#         st.write("Please wait as we train the model to your data...")
+
+#         # Create a new DataFrame for preprocessed data
+#         df_preprocessed_new = df_new.copy()
+
+#         # Apply text preprocessing to the 'tweet_text' column
+#         df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+
+#         # Encode the target variable using the saved label encoder
+#         df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+
+#         # Split the new data into training and testing sets
+#         X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+#             df_preprocessed_new['cleaned_text'],
+#             df_preprocessed_new['encoded_label'],
+#             test_size=0.2,
+#             random_state=42
+#         )
+
+#         # Create a new model pipeline
+#         new_model_pipeline = clone(model_pipeline)  # Copy the original model
+
+#         # Retrain the new model on the new training data
+#         new_model_pipeline.fit(X_train_new, y_train_new)
+
+#         # Save the updated pipeline to a new file path
+#         joblib.dump(new_model_pipeline, 'sgd_classifier_model_updated.joblib', protocol=4)
+
+#         # Optional: Print or return any relevant information
+#         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
+#         return new_model_pipeline  # Return the trained model
+
+
 def experiment_with_dataset(uploaded_file):
     global new_model_pipeline  # Use the global variable
 
     print("Experiment function is executing!")
 
-    if uploaded_file is not None:
-        # Load the new dataset
-        df_new = pd.read_csv(uploaded_file)
-        st.write("Preview of the uploaded data:")
-        st.write(df_new.head())
+    try:
+        if uploaded_file is not None:
+            # Load the new dataset
+            df_new = pd.read_csv(uploaded_file)
+            st.write("Preview of the uploaded data:")
+            st.write(df_new.head())
 
-        st.write("Please wait as we train the model to your data...")
+            st.write("Please wait as we train the model to your data...")
 
-        # Create a new DataFrame for preprocessed data
-        df_preprocessed_new = df_new.copy()
+            # Create a new DataFrame for preprocessed data
+            df_preprocessed_new = df_new.copy()
 
-        # Apply text preprocessing to the 'tweet_text' column
-        df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
+            # Apply text preprocessing to the 'tweet_text' column
+            df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
 
-        # Encode the target variable using the saved label encoder
-        df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
+            # Encode the target variable using the saved label encoder
+            df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
 
-        # Split the new data into training and testing sets
-        X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
-            df_preprocessed_new['cleaned_text'],
-            df_preprocessed_new['encoded_label'],
-            test_size=0.2,
-            random_state=42
-        )
+            # Split the new data into training and testing sets
+            X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
+                df_preprocessed_new['cleaned_text'],
+                df_preprocessed_new['encoded_label'],
+                test_size=0.2,
+                random_state=42
+            )
 
-        # Create a new model pipeline
-        new_model_pipeline = clone(model_pipeline)  # Copy the original model
+            # Create a new model pipeline
+            new_model_pipeline = clone(model_pipeline)  # Copy the original model
 
-        # Retrain the new model on the new training data
-        new_model_pipeline.fit(X_train_new, y_train_new)
+            # Retrain the new model on the new training data
+            new_model_pipeline.fit(X_train_new, y_train_new)
 
-        # Save the updated pipeline to a new file path
-        joblib.dump(new_model_pipeline, 'sgd_classifier_model_updated.joblib', protocol=4)
+            # Save the updated pipeline to a new file path
+            joblib.dump(new_model_pipeline, 'sgd_classifier_model_updated.joblib', protocol=4)
 
-        # Optional: Print or return any relevant information
-        st.success("Dataset reprocessed, and a new model trained and saved successfully.")
-        return new_model_pipeline  # Return the trained model
+            # Optional: Print or return any relevant information
+            st.success("Dataset reprocessed, and a new model trained and saved successfully.")
+            return new_model_pipeline  # Return the trained model
+
+    except Exception as e:
+        st.error(f"Training failed. Check your dataset and try again. Error: {e}")
+        return None  # Return None to indicate failure
 
 def new_binary_cyberbullying_detection(text):
     global new_model_pipeline  # Use the global variable
