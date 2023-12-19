@@ -5,7 +5,6 @@ import joblib
 import numpy as np
 import pandas as pd
 import nltk
-import google_trans_new
 from PIL import Image
 import sys  # Import the sys module
 # Download NLTK resources
@@ -15,7 +14,6 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from google_trans_new import google_translator # pip install google_trans_new==1.1.9
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
