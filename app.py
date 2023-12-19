@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
-from spacy_langdetect import LanguageDetector
 import sys  # Import the sys module
 # Download NLTK resources
 nltk.download('wordnet')
