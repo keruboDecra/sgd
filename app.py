@@ -16,8 +16,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from textblob import TextBlob
-# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
+from googletrans import Translator# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
 new_model_pipeline = None
 
