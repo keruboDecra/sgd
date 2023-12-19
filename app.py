@@ -5,6 +5,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import nltk
+import google_trans_new
 from PIL import Image
 import sys  # Import the sys module
 # Download NLTK resources
