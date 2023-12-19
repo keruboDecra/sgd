@@ -17,11 +17,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import six
-from six.moves import zip, xrange
 
-from .lang_detect_exception import ErrorCode, LangDetectException
-from .language import Language
 # Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
 new_model_pipeline = None
