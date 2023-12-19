@@ -10,3 +10,4 @@ scipy
 threadpoolctl
 six
 langdetect
+spacy-langdetect
