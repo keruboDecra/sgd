@@ -7,7 +7,7 @@ import pandas as pd
 import nltk
 from PIL import Image
 import sys  # Import the sys module
-
+from langdetect import detect
 # Download NLTK resources
 nltk.download('wordnet')
 nltk.download('stopwords')
