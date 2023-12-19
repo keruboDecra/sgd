@@ -11,3 +11,4 @@ threadpoolctl
 six
 langdetect
 spacy-langdetect
+pycld2
