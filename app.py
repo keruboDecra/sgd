@@ -14,9 +14,10 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+from google_trans_new import google_translator # pip install google_trans_new==1.1.9
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from googletrans import Translator# Load the entire pipeline (including TfidfVectorizer and SGDClassifier)
 model_pipeline = joblib.load('sgd_classifier_model.joblib')
 new_model_pipeline = None
 
