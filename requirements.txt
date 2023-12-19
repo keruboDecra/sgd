@@ -13,3 +13,4 @@ langdetect
 spacy-langdetect
 pycld2
 textblob
+googletrans
