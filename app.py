@@ -6,13 +6,12 @@ import numpy as np
 import pandas as pd
 import nltk
 from PIL import Image
-import langdetect
+from spacy_langdetect import LanguageDetector
 import sys  # Import the sys module
 # Download NLTK resources
 nltk.download('wordnet')
 nltk.download('stopwords')
 from sklearn.base import clone
-from langdetect import detect
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
