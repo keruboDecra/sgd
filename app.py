@@ -26,8 +26,8 @@ label_encoder = joblib.load('label_encoder.joblib')
 logo = Image.open('logo.png')
 
 # Function to clean and preprocess text
-def preprocess_text(text):
-    text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
+def preprocess_text(selected_text):
+    text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', selected_text)
     text = text.lower()
     stop_words = set(stopwords.words('english'))
     lemmatizer = WordNetLemmatizer()
@@ -35,10 +35,10 @@ def preprocess_text(text):
     return ' '.join(tokens)
 
 # Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text):
+def binary_cyberbullying_detection(selected_text):
     try:
         # Preprocess the input text
-        preprocessed_text = preprocess_text(text)
+        preprocessed_text = preprocess_text(selected_text)
 
         # Make prediction using the loaded pipeline
         prediction = sgd_classifier.predict([preprocessed_text])
@@ -55,10 +55,10 @@ def binary_cyberbullying_detection(text):
         return None, None
 
 # Function for multi-class cyberbullying detection
-def multi_class_cyberbullying_detection(text):
+def multi_class_cyberbullying_detection(selected_text):
     try:
         # Preprocess the input text
-        preprocessed_text = preprocess_text(text)
+        preprocessed_text = preprocess_text(selected_text)
 
         # Make prediction
         decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
