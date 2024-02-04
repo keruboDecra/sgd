@@ -18,6 +18,6 @@
     }
   ],
   "externally_connectable": {
-    "matches": ["https://*.streamlit.app/"]
+    "matches": ["https://gxlcwd7el9evpjkh6ifbdt.streamlit.app/"]
   }
 }
