@@ -7,7 +7,7 @@
     "48": "logo.png"
   },
   "permissions": ["activeTab"],
-  "browser_action": {
+  "action": {
     "default_icon": "logo.png",
     "default_popup": "popup.html"
   },
