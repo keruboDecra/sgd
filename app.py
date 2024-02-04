@@ -15,7 +15,7 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-
+from tweepy import Stream
 from tweepy import OAuthHandler
 
 
