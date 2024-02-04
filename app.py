@@ -5,7 +5,6 @@ import joblib
 import numpy as np
 import pandas as pd
 import nltk
-import tweepy  
 from io import BytesIO
 from PIL import Image
 import sys  # Import the sys module
