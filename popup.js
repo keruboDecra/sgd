@@ -4,9 +4,11 @@ document.getElementById('detectButton').addEventListener('click', function () {
   
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     var activeTab = tabs[0];
+    console.log('Sending message to content script');
     chrome.tabs.sendMessage(activeTab.id, { action: 'detectCyberbullying' });
   });
 });
+
 
 // Placeholder for "Posts Manager" button
 document.getElementById('postsManagerButton').addEventListener('click', function () {
