@@ -1,4 +1,3 @@
-import tweepy
 
 import streamlit as st
 import re
@@ -15,7 +14,6 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-import tweepy
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
