@@ -23,6 +23,16 @@
     h2 {
       color: #ecf0f1; /* Subtitle text color */
       margin-bottom: 20px;
+      animation: danceAnimation 2s infinite alternate; /* Added animation for subtitle */
+    }
+
+    @keyframes danceAnimation {
+      0% {
+        transform: translateX(-5px);
+      }
+      100% {
+        transform: translateX(5px);
+      }
     }
 
     .buttons-container {
@@ -67,6 +77,15 @@
       border-radius: 5px;
       margin-top: 20px;
     }
+
+    .logo-container {
+      margin-top: 20px;
+    }
+
+    .logo img {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
@@ -74,13 +93,18 @@
   <h2>Highlight text before pressing the Detect button</h2>
   <div class="buttons-container">
     <button id="detectButton">Detect Cyberbullying</button>
-
   </div>
   <div class="other-things-container">
     <p>Other things you can do with SafeSurf:</p>
     <div>
-    <button id="postsManagerButton">Posts Manager</button>
-    <button id="assessProfilesButton">Assess Profiles</button>    </div>
+      <button id="postsManagerButton">Posts Manager</button>
+      <button id="assessProfilesButton">Assess Profiles</button>
+    </div>
+  </div>
+  <div class="logo-container">
+    <div class="logo">
+      <img src="logo.png" alt="SafeSurf Logo">
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>
