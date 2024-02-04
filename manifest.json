@@ -17,9 +17,7 @@
       "js": ["content.js"]
     }
   ],
-
   "externally_connectable": {
     "matches": ["https://gxlcwd7el9evpjkh6ifbdt.streamlit.app/"]
-}
   }
 }
