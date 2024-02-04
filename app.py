@@ -452,3 +452,34 @@ elif page == "Custom Twitter Interaction":
     custom_twitter_interaction_page()
 
 
+
+@st.experimental_memo
+def classify_highlighted_text():
+    st.title('Cyberbullying Detection App')
+
+    # Receive selected text from Chrome extension
+    selected_text = st.session_state.selected_text
+
+    if selected_text:
+        st.write(f"Selected Text: {selected_text}")
+
+        # Perform classification using your existing functions
+        binary_result, offensive_words = new_binary_cyberbullying_detection(selected_text)
+        multi_class_result = new_multi_class_cyberbullying_detection(selected_text)
+
+        # Display classification results in Streamlit
+        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+        st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
+
+# Streamlit UI
+st.set_page_config(
+    page_title="Cyberbullying Detection App",
+    page_icon="🕵️",
+)
+
+# Check if the app is being used by the Chrome extension
+if 'selected_text' in st.session_state:
+    classify_highlighted_text()
+else:
+    st.warning("Please upload a CSV file to proceed.")
+
