@@ -16,7 +16,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from tweepy.streaming import Stream
 from tweepy import OAuthHandler
 
 
