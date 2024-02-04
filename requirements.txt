@@ -9,5 +9,5 @@ joblib==1.3.2
 scipy
 threadpoolctl
 google-trans-new
-tweepy
+tweepy==3.10.0
 
