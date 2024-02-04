@@ -15,8 +15,7 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from tweepy import Stream
-from tweepy import OAuthHandler
+
 
 
 # Twitter API credentials
@@ -43,7 +42,7 @@ label_encoder = joblib.load('label_encoder.joblib')
 logo = Image.open('logo.png')
 
 # Function to clean and preprocess text
-def preprocess_text(text):
+def preprocess_text(selected_text):
     text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
     text = text.lower()
     stop_words = set(stopwords.words('english'))
@@ -54,7 +53,7 @@ def preprocess_text(text):
 
 
 # Function for binary cyberbullying detection
-def binary_cyberbullying_detection(text):
+def binary_cyberbullying_detection(selected_text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
@@ -74,7 +73,7 @@ def binary_cyberbullying_detection(text):
         return None, None
 
 # Function for multi-class cyberbullying detection
-def multi_class_cyberbullying_detection(text):
+def multi_class_cyberbullying_detection(selected_text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
