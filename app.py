@@ -462,8 +462,8 @@ def classify_highlighted_text():
         st.write(f"Selected Text: {selected_text}")
 
         # Perform classification using your existing functions
-        binary_result, offensive_words = new_binary_cyberbullying_detection(selected_text)
-        multi_class_result = new_multi_class_cyberbullying_detection(selected_text)
+        binary_result, offensive_words = binary_cyberbullying_detection(selected_text)
+        multi_class_result = multi_class_cyberbullying_detection(selected_text)
 
         # Display classification results in Streamlit
         st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
