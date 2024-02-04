@@ -13,20 +13,27 @@
       padding: 20px;
       margin: 0;
       overflow: hidden;
-      background-color: #f5f5f5;
+      background-color: #3498db; /* Updated background color */
     }
 
     h1 {
-      color: #333;
+      color: #fff; /* Text color updated to white */
     }
 
     h2 {
-      color: #555;
+      color: #ecf0f1; /* Subtitle text color */
       margin-bottom: 20px;
     }
 
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px; /* Margin added to create space between text and buttons */
+    }
+
     button {
-      background-color: #4CAF50;
+      background-color: #2ecc71; /* Updated button background color */
       color: white;
       padding: 12px 20px;
       text-align: center;
@@ -37,20 +44,39 @@
       cursor: pointer;
       border-radius: 5px;
       border: none;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform for subtle animation */
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #27ae60; /* Updated button hover color */
+      transform: scale(1.05); /* Added scale effect on hover */
+    }
+
+    .other-things-container {
+      background-color: #2c3e50; /* Background color for the text section */
+      color: #ecf0f1; /* Text color for the text section */
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <h1>Cyberbullying Detector</h1>
   <h2>Highlight text before pressing the Detect button</h2>
-  <button id="detectButton">Detect Cyberbullying</button>
-  <button id="postsManagerButton">Posts Manager</button>
-  <button id="assessProfilesButton">Assess Profiles</button>
+  <div class="buttons-container">
+    <button id="detectButton">Detect Cyberbullying</button>
+    <button id="postsManagerButton">Posts Manager</button>
+    <button id="assessProfilesButton">Assess Profiles</button>
+  </div>
+  <div class="other-things-container">
+    <p>Other things you can do with SafeSurf:</p>
+    <ul>
+      <li>Monitor online activity</li>
+      <li>Receive real-time alerts</li>
+      <li>Customize detection settings</li>
+    </ul>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
