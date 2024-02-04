@@ -452,8 +452,6 @@ elif page == "Custom Twitter Interaction":
     custom_twitter_interaction_page()
 
 
-
-@st.experimental_memo
 def classify_highlighted_text():
     st.title('Cyberbullying Detection App')
 
