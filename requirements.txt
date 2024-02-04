@@ -10,4 +10,5 @@ scipy
 threadpoolctl
 google-trans-new
 openai
+python
 tweepy==3.9.0
