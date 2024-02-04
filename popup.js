@@ -1,5 +1,7 @@
 // Detect Cyberbullying button
 document.getElementById('detectButton').addEventListener('click', function () {
+  console.log('Detect Button Clicked');
+  
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     var activeTab = tabs[0];
     chrome.tabs.sendMessage(activeTab.id, { action: 'detectCyberbullying' });
@@ -17,3 +19,4 @@ document.getElementById('assessProfilesButton').addEventListener('click', functi
   // Add functionality for "Assess Profiles" here
   console.log('Assess Profiles button clicked - Placeholder');
 });
+
