@@ -16,9 +16,10 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from stream import TweetListener
+from tweepy import Stream
+from tweepy import OAuthHandler
 
-
-import tweepy
 
 # Twitter API credentials
 api_key = "HBDNk66DlCsiPLmXWv43U7xBE"
