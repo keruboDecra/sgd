@@ -469,12 +469,6 @@ def classify_highlighted_text():
         st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
         st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
 
-# Streamlit UI
-st.set_page_config(
-    page_title="Cyberbullying Detection App",
-    page_icon="🕵️",
-)
-
 # Check if the app is being used by the Chrome extension
 if 'selected_text' in st.session_state:
     classify_highlighted_text()
