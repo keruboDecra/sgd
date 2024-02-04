@@ -35,25 +35,6 @@ def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
-# Function for multi-class cyberbullying detection
-def multi_class_cyberbullying_detection(text):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(text)
-
-        # Make prediction
-        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
-
-        # Get the predicted class index
-        predicted_class_index = np.argmax(decision_function_values)
-
-        # Get the predicted class label using the label encoder
-        predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
-
-        return predicted_class_label, decision_function_values
-    except Exception as e:
-        st.error(f"Error in multi_class_cyberbullying_detection: {e}")
-        return None
 
 
 
@@ -96,54 +77,6 @@ def multi_class_cyberbullying_detection(text):
     except Exception as e:
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
-
-
-# def experiment_with_dataset(uploaded_file):
-#     global new_model_pipeline  # Use the global variable
-
-#     print("Experiment function is executing!")
-#     try:
-
-#     if uploaded_file is not None:
-#         # Load the new dataset
-#         df_new = pd.read_csv(uploaded_file)
-#         st.write("Preview of the uploaded data:")
-#         st.write(df_new.head())
-
-#         st.write("Please wait as we train the model to your data...")
-
-#         # Create a new DataFrame for preprocessed data
-#         df_preprocessed_new = df_new.copy()
-
-#         # Apply text preprocessing to the 'tweet_text' column
-#         df_preprocessed_new['cleaned_text'] = df_preprocessed_new['tweet_text'].apply(preprocess_text)
-
-#         # Encode the target variable using the saved label encoder
-#         df_preprocessed_new['encoded_label'] = label_encoder.transform(df_preprocessed_new['cyberbullying_type'])
-
-#         # Split the new data into training and testing sets
-#         X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(
-#             df_preprocessed_new['cleaned_text'],
-#             df_preprocessed_new['encoded_label'],
-#             test_size=0.2,
-#             random_state=42
-#         )
-
-#         # Create a new model pipeline
-#         new_model_pipeline = clone(model_pipeline)  # Copy the original model
-
-#         # Retrain the new model on the new training data
-#         new_model_pipeline.fit(X_train_new, y_train_new)
-
-#         # Save the updated pipeline to a new file path
-#         joblib.dump(new_model_pipeline, 'sgd_classifier_model_updated.joblib', protocol=4)
-
-#         # Optional: Print or return any relevant information
-#         st.success("Dataset reprocessed, and a new model trained and saved successfully.")
-#         return new_model_pipeline  # Return the trained model
-
-#     except Exception as e:
-#         st.error(f"Training failed. Check your dataset and try again. Error: {e}")
 
 
 def experiment_with_dataset(uploaded_file):
