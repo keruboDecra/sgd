@@ -17,4 +17,8 @@
       "js": ["content.js"]
     }
   ]
+
+  "externally_connectable": {
+    "matches": ["http://localhost:8501/*"]
+  }
 }
