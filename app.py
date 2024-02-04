@@ -1,4 +1,3 @@
-
 import streamlit as st
 import re
 import joblib
@@ -16,12 +15,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-model_pipeline = joblib.load('sgd_classifier_model.joblib')
-new_model_pipeline = None
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
@@ -31,7 +26,7 @@ label_encoder = joblib.load('label_encoder.joblib')
 logo = Image.open('logo.png')
 
 # Function to clean and preprocess text
-def preprocess_text(selected_text):
+def preprocess_text(text):
     text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
     text = text.lower()
     stop_words = set(stopwords.words('english'))
@@ -39,16 +34,14 @@ def preprocess_text(selected_text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
-
-
 # Function for binary cyberbullying detection
-def binary_cyberbullying_detection(selected_text):
+def binary_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
 
         # Make prediction using the loaded pipeline
-        prediction = model_pipeline.predict([preprocessed_text])
+        prediction = sgd_classifier.predict([preprocessed_text])
 
         # Check for offensive words
         with open('en.txt', 'r') as f:
@@ -62,7 +55,7 @@ def binary_cyberbullying_detection(selected_text):
         return None, None
 
 # Function for multi-class cyberbullying detection
-def multi_class_cyberbullying_detection(selected_text):
+def multi_class_cyberbullying_detection(text):
     try:
         # Preprocess the input text
         preprocessed_text = preprocess_text(text)
@@ -81,30 +74,31 @@ def multi_class_cyberbullying_detection(selected_text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
+# Streamlit UI
+st.title('Cyberbullying Detection App')
 
+# Input text box
+user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
+# Check if selected text is provided from Chrome extension
+selected_text = st.session_state.get('selected_text')
 
-def classify_highlighted_text():
-    st.title('Cyberbullying Detection App')
+if selected_text:
+    st.write(f"Selected Text: {selected_text}")
 
-    # Receive selected text from Chrome extension
-    selected_text = st.session_state.selected_text
-    print(f"Received selected text: {selected_text}")  # Add this line for debugging
+    # Perform classification using your existing functions
+    binary_result, offensive_words = binary_cyberbullying_detection(selected_text)
+    multi_class_result = multi_class_cyberbullying_detection(selected_text)
 
-    if selected_text:
-        st.write(f"Selected Text: {selected_text}")
+    # Display classification results in Streamlit
+    st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
 
-        # Perform classification using your existing functions
-        binary_result, offensive_words = binary_cyberbullying_detection(selected_text)
-        multi_class_result = multi_class_cyberbullying_detection(selected_text)
+# Perform classification based on user input
+if user_input:
+    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
+    multi_class_result = multi_class_cyberbullying_detection(user_input)
 
-        # Display classification results in Streamlit
-        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-        st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
-
-# Check if the app is being used by the Chrome extension
-if 'selected_text' in st.session_state:
-    classify_highlighted_text()
-
-
-
+    # Display classification results in Streamlit
+    st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+    st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
