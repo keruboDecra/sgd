@@ -1,4 +1,3 @@
-this is my app i wnat to integrate it with Twitter API such that if a text is safe to send then it can post it directly to a users twitter  
 
 
 
