@@ -1,13 +1,12 @@
 
+
+
 import streamlit as st
 import re
 import joblib
-import tweepy
-
 import numpy as np
 import pandas as pd
 import nltk
-from io import BytesIO
 from PIL import Image
 import sys  # Import the sys module
 # Download NLTK resources
@@ -17,20 +16,6 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from tweepy import Stream
-from tweepy import OAuthHandler
-
-
-# Twitter API credentials
-api_key = "HBDNk66DlCsiPLmXWv43U7xBE"
-api_key_secret = "BNejVusnkg9GCwfgVMTRmyN5CKADO62v969cUKhPzMatlPrn5B"
-access_token = "1729269231722594305-iB1xl33Ou4GmrlimOOdJ0vmx2FD8a4"
-access_token_secret = "bE0b5A0gMsujnsIhMn6QEGqiVa6K6rkZLLeJXxWgDfUEo"
-
-# Authenticate to Twitter API
-auth = tweepy.OAuthHandler(api_key, api_key_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -265,19 +250,24 @@ st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
 
-# Twitter Interaction page
 def twitter_interaction_page():
     st.title('Cyberbullying Detection App')
 
-    # Input text box
+        # Input text box
     user_input = st.text_area("Share your thoughts:", "", key="user_input")
     
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
 
-    # View flag for detailed predictions
+    # # View flag for detailed predictions
+    # view_flagging_reasons = binary_result == 1
+    # view_label = "View Flagging Reasons" if view_flagging_reasons else "Review Tweet Quality"
+    # view_predictions = st.checkbox(view_label, value=False)
+
     view_flagging_reasons = binary_result == 1
     view_predictions = st.checkbox("View Flagging Reasons", value=view_flagging_reasons)
+    
+
     
     # Check if the user has entered any text
     if user_input:
@@ -319,19 +309,7 @@ def twitter_interaction_page():
     
                 # Button to send tweet
                 if st.button('Send Tweet'):
-                    # Post the tweet to Twitter
-                    try:
-                        api.update_status(status=user_input)
-                        st.success('Tweet Sent!')
-                    except tweepy.TweepError as e:
-                        st.error(f"Error sending tweet: {e}")
-
-# Check the selected page and call the corresponding function
-if page == "Twitter Interaction":
-    twitter_interaction_page()
-elif page == "Custom Twitter Interaction":
-    custom_twitter_interaction_page()
-
+                    st.success('Tweet Sent!')
 
 
 def custom_twitter_interaction_page():
