@@ -48,7 +48,7 @@ def binary_cyberbullying_detection(text, selected_text=None):
         preprocessed_text = preprocess_text(text)
 
         # If highlighted text is provided, preprocess it as well
-        if highlighted_text:
+        if selected_text:
             preprocessed_selected_text = preprocess_text(selected_text)
         else:
             preprocessed_selected_text = None
