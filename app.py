@@ -263,34 +263,31 @@ st.markdown(
 st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
 
-
 def twitter_interaction_page():
     st.title('Cyberbullying Detection App')
 
+    # Check if the app is being used by the Chrome extension
+    if 'selected_text' in st.session_state:
+        selected_text = st.session_state.selected_text
+        user_input = selected_text
+    else:
         # Input text box
-    user_input = st.text_area("Share your thoughts:", "", key="user_input")
-    
+        user_input = st.text_area("Share your thoughts:", "", key="user_input")
+
     # Make binary prediction and check for offensive words
     binary_result, offensive_words = binary_cyberbullying_detection(user_input)
 
-    # # View flag for detailed predictions
-    # view_flagging_reasons = binary_result == 1
-    # view_label = "View Flagging Reasons" if view_flagging_reasons else "Review Tweet Quality"
-    # view_predictions = st.checkbox(view_label, value=False)
-
     view_flagging_reasons = binary_result == 1
     view_predictions = st.checkbox("View Flagging Reasons", value=view_flagging_reasons)
-    
 
-    
     # Check if the user has entered any text
     if user_input:
         st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
-        
+
         # Display binary prediction only if "View Flagging Reasons" is checked
         if view_predictions and binary_result == 1:
             st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-        
+
         # Check for offensive words and display warning
         if offensive_words and (view_predictions or binary_result == 0):
             # Adjust the warning message based on cyberbullying classification
@@ -298,20 +295,20 @@ def twitter_interaction_page():
                 st.warning(f"This tweet contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
             else:
                 st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
-    
+
         st.markdown("</div>", unsafe_allow_html=True)
-    
+
         # Make multi-class prediction
         multi_class_result = multi_class_cyberbullying_detection(user_input)
         if multi_class_result is not None:
             predicted_class, prediction_probs = multi_class_result
             st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
-            
+
             if view_predictions:
                 st.write(f"Multi-Class Predicted Class: {predicted_class}")
-    
+
             st.markdown("</div>", unsafe_allow_html=True)
-    
+
             # Check if classified as cyberbullying
             if predicted_class != 'not_cyberbullying':
                 st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
@@ -320,7 +317,7 @@ def twitter_interaction_page():
             else:
                 # Display message before sending
                 st.success('This tweet is safe to send.')
-    
+
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
