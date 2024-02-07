@@ -1,6 +1,3 @@
-
-
-
 import streamlit as st
 import re
 import joblib
@@ -231,15 +228,12 @@ def twitter_interaction_page():
                 # Button to send tweet
                 if st.button('Send Tweet'):
                     st.success('Tweet Sent!')
-
-
 def classify_highlighted_text():
     st.title('Cyberbullying Detection App')
 
-    # Receive user input (highlighted text) using text_input
-    selected_text = st.text_input('Enter Highlighted Text:', '')
-
-    if selected_text:
+    # Check if the app is being used by the Chrome extension
+    if 'selected_text' in st.session_state:
+        selected_text = st.session_state.selected_text
         st.write(f"Selected Text: {selected_text}")
 
         # Perform classification using your existing functions
@@ -249,6 +243,9 @@ def classify_highlighted_text():
         # Display classification results in Streamlit
         st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
         st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
+    else:
+        st.info("Please use the Chrome extension to highlight text for classification.")
+
 
 # Check if the app is being used by the Chrome extension
 if 'selected_text' in st.session_state:
