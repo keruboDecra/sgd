@@ -5,10 +5,11 @@ document.getElementById('detectButton').addEventListener('click', function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     var activeTab = tabs[0];
     console.log('Sending message to content script');
-    chrome.tabs.sendMessage(activeTab.id, { action: 'detectCyberbullying' });
+    chrome.tabs.sendMessage(activeTab.id, { action: 'detectCyberbullying' }, function(response) {
+      console.log('Response from content script:', response);
+    });
   });
 });
-
 
 // Placeholder for "Posts Manager" button
 document.getElementById('postsManagerButton').addEventListener('click', function () {
@@ -21,4 +22,3 @@ document.getElementById('assessProfilesButton').addEventListener('click', functi
   // Add functionality for "Assess Profiles" here
   console.log('Assess Profiles button clicked - Placeholder');
 });
-
