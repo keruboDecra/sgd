@@ -38,47 +38,61 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words]
     return ' '.join(tokens)
 
+# Add your binary_cyberbullying_detection and multi_class_cyberbullying_detection functions here
 
 
-# # Function for binary cyberbullying detection
-# def binary_cyberbullying_detection(text):
-#     try:
-#         # Preprocess the input text
-#         preprocessed_text = preprocess_text(text)
+# Function for binary cyberbullying detection
+def binary_cyberbullying_detection(text, selected_text=None):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
 
-#         # Make prediction using the loaded pipeline
-#         prediction = model_pipeline.predict([preprocessed_text])
+        # If highlighted text is provided, preprocess it as well
+        if highlighted_text:
+            preprocessed_highlighted_text = preprocess_text(selected_text)
+        else:
+            preprocessed_highlighted_text = None
 
-#         # Check for offensive words
-#         with open('en.txt', 'r') as f:
-#             offensive_words = [line.strip() for line in f]
+        # Make prediction using the loaded pipeline
+        prediction = model_pipeline.predict([preprocessed_text])
 
-#         offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
+        # Check for offensive words in both text and highlighted text
+        with open('en.txt', 'r') as f:
+            offensive_words = [line.strip() for line in f]
 
-#         return prediction[0], offending_words
-#     except Exception as e:
-#         st.error(f"Error in binary_cyberbullying_detection: {e}")
-#         return None, None
+        offending_words_text = [word for word in preprocessed_text.split() if word in offensive_words]
+        offending_words_highlighted = []  # Modify this if you want to check offensive words in highlighted text
 
-# # Function for multi-class cyberbullying detection
-# def multi_class_cyberbullying_detection(text):
-#     try:
-#         # Preprocess the input text
-#         preprocessed_text = preprocess_text(text)
+        return prediction[0], offending_words_text, offending_words_highlighted
+    except Exception as e:
+        st.error(f"Error in binary_cyberbullying_detection: {e}")
+        return None, None, None
 
-#         # Make prediction
-#         decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
+# Function for multi-class cyberbullying detection
+def multi_class_cyberbullying_detection(text, selected_text=None):
+    try:
+        # Preprocess the input text
+        preprocessed_text = preprocess_text(text)
 
-#         # Get the predicted class index
-#         predicted_class_index = np.argmax(decision_function_values)
+        # If highlighted text is provided, preprocess it as well
+        if highlighted_text:
+            preprocessed_highlighted_text = preprocess_text(selected_text)
+        else:
+            preprocessed_highlighted_text = None
 
-#         # Get the predicted class label using the label encoder
-#         predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
+        # Make prediction
+        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
 
-#         return predicted_class_label, decision_function_values
-#     except Exception as e:
-#         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
-#         return None
+        # Get the predicted class index
+        predicted_class_index = np.argmax(decision_function_values)
+
+        # Get the predicted class label using the label encoder
+        predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
+
+        return predicted_class_label, decision_function_values
+    except Exception as e:
+        st.error(f"Error in multi_class_cyberbullying_detection: {e}")
+        return None, None
 
 
 def experiment_with_dataset(uploaded_file):
@@ -405,53 +419,6 @@ def classify_highlighted_text():
         st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
         st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
 
-# Add your binary_cyberbullying_detection and multi_class_cyberbullying_detection functions here
-
-
-# Function for binary cyberbullying detection
-def binary_cyberbullying_detection(selected_text):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(selected_text)
-
-        # Make prediction using the loaded pipeline
-        prediction = model_pipeline.predict([preprocessed_text])
-
-        # Check for offensive words
-        with open('en.txt', 'r') as f:
-            offensive_words = [line.strip() for line in f]
-
-        offending_words = [word for word in preprocessed_text.split() if word in offensive_words]
-
-        return prediction[0], offending_words
-    except Exception as e:
-        st.error(f"Error in binary_cyberbullying_detection: {e}")
-        return None, None
-
-# Function for multi-class cyberbullying detection
-def multi_class_cyberbullying_detection(selected_text):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(selected_text)
-
-        # Make prediction
-        decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
-
-        # Get the predicted class index
-        predicted_class_index = np.argmax(decision_function_values)
-
-        # Get the predicted class label using the label encoder
-        predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
-
-        return predicted_class_label, decision_function_values
-    except Exception as e:
-        st.error(f"Error in multi_class_cyberbullying_detection: {e}")
-        return None
-
-
-classify_highlighted_text()
-
-
-# # Check if the app is being used by the Chrome extension
-# if 'selected_text' in st.session_state:
-#     classify_highlighted_text()
+# Check if the app is being used by the Chrome extension
+if 'selected_text' in st.session_state:
+    classify_highlighted_text()
