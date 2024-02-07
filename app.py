@@ -49,9 +49,9 @@ def binary_cyberbullying_detection(text, selected_text=None):
 
         # If highlighted text is provided, preprocess it as well
         if highlighted_text:
-            preprocessed_highlighted_text = preprocess_text(selected_text)
+            preprocessed_selected_text = preprocess_text(selected_text)
         else:
-            preprocessed_highlighted_text = None
+            preprocessed_selected_text = None
 
         # Make prediction using the loaded pipeline
         prediction = model_pipeline.predict([preprocessed_text])
@@ -61,9 +61,9 @@ def binary_cyberbullying_detection(text, selected_text=None):
             offensive_words = [line.strip() for line in f]
 
         offending_words_text = [word for word in preprocessed_text.split() if word in offensive_words]
-        offending_words_highlighted = []  # Modify this if you want to check offensive words in highlighted text
+        offending_words_selected = []  # Modify this if you want to check offensive words in highlighted text
 
-        return prediction[0], offending_words_text, offending_words_highlighted
+        return prediction[0], offending_words_text, offending_words_selected
     except Exception as e:
         st.error(f"Error in binary_cyberbullying_detection: {e}")
         return None, None, None
@@ -75,10 +75,10 @@ def multi_class_cyberbullying_detection(text, selected_text=None):
         preprocessed_text = preprocess_text(text)
 
         # If highlighted text is provided, preprocess it as well
-        if highlighted_text:
-            preprocessed_highlighted_text = preprocess_text(selected_text)
+        if selected_text:
+            preprocessed_selected_text = preprocess_text(selected_text)
         else:
-            preprocessed_highlighted_text = None
+            preprocessed_selected_text = None
 
         # Make prediction
         decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
