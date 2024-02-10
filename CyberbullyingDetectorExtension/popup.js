@@ -5,9 +5,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   // Display highlighted text
   highlightedTextElement.textContent = message.text;
 
-  // Send highlighted text to your Streamlit app for feedback
-  chrome.runtime.sendMessage({ text: message.text }, function (response) {
-    // Display feedback in the popup
-    feedbackElement.textContent = response.feedback;
-  });
+  // Optionally, you can update the feedbackElement with additional feedback from Streamlit
+  // feedbackElement.textContent = message.feedback;
 });
