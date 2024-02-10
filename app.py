@@ -19,7 +19,7 @@ import json
 from streamlit import session_state
 
 # Initialize session state
-session_state = session_state.get(user_input='', chrome_extension_message=None)
+session_state = session_state(user_input='', chrome_extension_message=None)
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
