@@ -393,24 +393,4 @@ if page == "Twitter Interaction":
 elif page == "Custom Twitter Interaction":
     custom_twitter_interaction_page()
 
-def classify_highlighted_text():
-    st.title('Cyberbullying Detection App')
 
-    # Receive selected text from Chrome extension
-    selected_text = st.session_state.selected_text
-    print(f"Received selected text: {selected_text}")  # Add this line for debugging
-
-    if selected_text:
-        st.write(f"Selected Text: {selected_text}")
-
-        # Perform classification using your existing functions
-        binary_result, offensive_words = binary_cyberbullying_detection(selected_text)
-        multi_class_result = multi_class_cyberbullying_detection(selected_text)
-
-        # Display classification results in Streamlit
-        st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
-        st.write(f"Multi-Class Predicted Class: {multi_class_result[0]}")
-
-# Check if the app is being used by the Chrome extension
-if 'selected_text' in st.session_state:
-    classify_highlighted_text()
