@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+import json
 
 
 from sklearn.ensemble import RandomForestClassifier
@@ -248,7 +249,28 @@ st.markdown(
 # Streamlit UI
 st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
+# Receive messages from the Chrome extension
+@st.cache(allow_output_mutation=True)
+def get_extension_feedback():
+    return []
 
+message = st._get_session_state().get('chrome_extension_message', None)
+if message:
+    highlighted_text = message.get('text', '')
+    # Process the highlighted text and get feedback
+    feedback = your_cyberbullying_detection_function(highlighted_text)
+    # Store feedback in cache
+    extension_feedback = get_extension_feedback()
+    extension_feedback.append({"text": highlighted_text, "feedback": feedback})
+    st._get_session_state().chrome_extension_feedback = extension_feedback
+    # Reset the message
+    st._get_session_state().chrome_extension_message = None
+
+# Display the feedback
+extension_feedback = get_extension_feedback()
+for item in extension_feedback:
+    st.write(f"Text: {item['text']}")
+    st.write(f"Feedback: {item['feedback']}")
 
 # Twitter Interaction page
 def twitter_interaction_page():
