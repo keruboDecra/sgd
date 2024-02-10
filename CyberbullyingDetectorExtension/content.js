@@ -9,13 +9,9 @@ document.addEventListener("mouseup", function () {
     });
   }
 });
-document.addEventListener('DOMContentLoaded', function () {
-  // Get the button element
-  var testButton = document.getElementById('testButton');
 
-  // Add click event listener to the button
-  testButton.addEventListener('click', function () {
-    // Send a message to the background script
-    chrome.runtime.sendMessage({ testMessage: 'Testing communication from popup' });
-  });
+// Add a listener for the background script message
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  // Handle the message from the background script if needed
+  console.log(message);
 });
