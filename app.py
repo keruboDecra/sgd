@@ -14,20 +14,8 @@ from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from tweepy import Stream
-from tweepy import OAuthHandler
 
 
-# Twitter API credentials
-api_key = "HBDNk66DlCsiPLmXWv43U7xBE"
-api_key_secret = "BNejVusnkg9GCwfgVMTRmyN5CKADO62v969cUKhPzMatlPrn5B"
-access_token = "1729269231722594305-iB1xl33Ou4GmrlimOOdJ0vmx2FD8a4"
-access_token_secret = "bE0b5A0gMsujnsIhMn6QEGqiVa6K6rkZLLeJXxWgDfUEo"
-
-# Authenticate to Twitter API
-auth = tweepy.OAuthHandler(api_key, api_key_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
