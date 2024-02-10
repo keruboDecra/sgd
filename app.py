@@ -331,16 +331,7 @@ def twitter_interaction_page():
                 # Display message before sending
                 st.success('This tweet is safe to send.')
 
-                # Button to send tweet
-                if st.button('Send Tweet'):
-                    # Post the tweet to Twitter
-                    try:
-                        api.update_status(status=user_input)
-                        st.success('Tweet Sent!')
-                    except tweepy.TweepError as e:
-                        st.error(f"Error sending tweet: {e}")
-
-
+ 
 
 
 def custom_twitter_interaction_page():
