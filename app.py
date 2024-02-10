@@ -273,7 +273,8 @@ if message:
     st._get_session_state().chrome_extension_message = None
 
 # Display the feedback
-extension_feedback = get_extension_feedback()
+
+extension_feedback = session_state.get('chrome_extension_feedback', [])
 for item in extension_feedback:
     st.write(f"Text: {item['text']}")
     st.write(f"Feedback: {item['feedback']}")
