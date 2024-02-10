@@ -30,7 +30,7 @@ label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the logo image
 logo = Image.open('logo.png')
-session_state = session_state.get(user_input='', chrome_extension_message=None)
+session_state = session_state(user_input='', chrome_extension_message=None)
 
 # Function to clean and preprocess text
 def preprocess_text(text):
