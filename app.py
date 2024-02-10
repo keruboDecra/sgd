@@ -17,6 +17,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 import json
 
+from streamlit import session_state
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -29,6 +30,7 @@ label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the logo image
 logo = Image.open('logo.png')
+session_state = session_state.get(user_input='', chrome_extension_message=None)
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -254,7 +256,7 @@ page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter I
 def get_extension_feedback():
     return []
 
-message = st._get_session_state().get('chrome_extension_message', None)
+message = session_state.get('chrome_extension_message', None)
 if message:
     highlighted_text = message.get('text', '')
     # Process the highlighted text and get feedback
