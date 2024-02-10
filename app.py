@@ -311,11 +311,6 @@ def twitter_interaction_page():
                     except tweepy.TweepError as e:
                         st.error(f"Error sending tweet: {e}")
 
-# Check the selected page and call the corresponding function
-if page == "Twitter Interaction":
-    twitter_interaction_page()
-elif page == "Custom Twitter Interaction":
-    custom_twitter_interaction_page()
 
 
 
