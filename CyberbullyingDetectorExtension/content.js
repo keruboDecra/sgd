@@ -9,3 +9,13 @@ document.addEventListener("mouseup", function () {
     });
   }
 });
+document.addEventListener('DOMContentLoaded', function () {
+  // Get the button element
+  var testButton = document.getElementById('testButton');
+
+  // Add click event listener to the button
+  testButton.addEventListener('click', function () {
+    // Send a message to the background script
+    chrome.runtime.sendMessage({ testMessage: 'Testing communication from popup' });
+  });
+});
