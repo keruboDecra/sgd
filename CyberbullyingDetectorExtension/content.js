@@ -4,8 +4,12 @@ document.addEventListener("mouseup", function () {
   if (selectedText) {
     // Send the selected text to your Streamlit app
     chrome.runtime.sendMessage({ text: selectedText }, function (response) {
-      // Handle the response from your Streamlit app
-      console.log(response);
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        // Handle the response from your Streamlit app
+        console.log(response);
+      }
     });
   }
 });
