@@ -7,17 +7,9 @@
     "activeTab",
     "storage"
   ],
-
   "content_security_policy": {
-  "extension_pages": "script-src 'self'; object-src 'self'"
-},
-
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
   "action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
