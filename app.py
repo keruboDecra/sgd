@@ -7,13 +7,14 @@ import nltk
 from io import BytesIO
 from PIL import Image
 import sys  # Import the sys module
-
+# Download NLTK resources
+nltk.download('wordnet')
+nltk.download('stopwords')
 from sklearn.base import clone
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-import nltk
-nltk.download('wordnet')
+
 
 import json
 from streamlit import session_state
