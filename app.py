@@ -16,12 +16,6 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-import json
-from streamlit import session_state
-
-# Initialize session state
-session_state.user_input = ''
-session_state.chrome_extension_message = None
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -180,53 +174,6 @@ def new_multi_class_cyberbullying_detection(text):
         st.error(f"Error in new_multi_class_cyberbullying_detection: {e}")
         return None
 
-import numpy as np
-import streamlit as st
-
-def cyberbullying_detection(highlighted_text, selected_text=None, model_type='binary'):
-    try:
-        # Preprocess the input text
-        preprocessed_text = preprocess_text(highlighted_text)
-
-        # If highlighted text is provided, preprocess it as well
-        if selected_text:
-            preprocessed_selected_text = preprocess_text(selected_text)
-        else:
-            preprocessed_selected_text = None
-
-        if model_type == 'binary':
-            # Make prediction using the loaded pipeline for binary classification
-            prediction = model_pipeline.predict([preprocessed_text])
-
-            # Check for offensive words in both text and highlighted text
-            with open('en.txt', 'r') as f:
-                offensive_words = [line.strip() for line in f]
-
-            offending_words_text = [word for word in preprocessed_text.split() if word in offensive_words]
-            offending_words_selected = []  # Modify this if you want to check offensive words in highlighted text
-
-            return prediction[0], offending_words_text, offending_words_selected
-
-        elif model_type == 'multi_class':
-            # Make prediction for multi-class classification
-            decision_function_values = sgd_classifier.decision_function([preprocessed_text])[0]
-
-            # Get the predicted class index
-            predicted_class_index = np.argmax(decision_function_values)
-
-            # Get the predicted class label using the label encoder
-            predicted_class_label = label_encoder.inverse_transform([predicted_class_index])[0]
-
-            return predicted_class_label, decision_function_values
-
-        else:
-            st.error("Invalid model_type. Choose either 'binary' or 'multi_class'.")
-            return None, None, None
-
-    except Exception as e:
-        st.error(f"Error in cyberbullying_detection: {e}")
-        return None, None, None
-
 
 # Set page title and icon
 st.set_page_config(
@@ -302,31 +249,9 @@ st.markdown(
 # Streamlit UI
 st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
 page = st.sidebar.radio("Select Page", ["Server", "Continual Learning"])
-# Receive messages from the Chrome extension
-@st.cache_data()
-def get_extension_feedback():
-    return []
 
-message = session_state.get('chrome_extension_message', None)
-if message:
-    highlighted_text = message.get('text', '')
-    # Process the highlighted text and get feedback
-    feedback = cyberbullying_detection(highlighted_text)
-    # Store feedback in cache
-    extension_feedback = get_extension_feedback()
-    extension_feedback.append({"text": highlighted_text, "feedback": feedback})
-    st._get_session_state().chrome_extension_feedback = extension_feedback
-    # Reset the message
-    st._get_session_state().chrome_extension_message = None
 
-# Display the feedback
 
-extension_feedback = session_state.get('chrome_extension_feedback', [])
-for item in extension_feedback:
-    st.write(f"Text: {item['text']}")
-    st.write(f"Feedback: {item['feedback']}")
-
-# Twitter Interaction page
 def twitter_interaction_page():
     st.title('Cyberbullying Detection App')
 
@@ -440,7 +365,6 @@ def custom_twitter_interaction_page():
                     # Display message before sending
                     st.success('Safe!')
 
-                    # Button to send tweet
                     if st.button('Copy Text'):
                         st.success('Copied!')
 
