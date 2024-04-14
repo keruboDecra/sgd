@@ -38,7 +38,7 @@ session_state.user_input = ''
 session_state.chrome_extension_message = None
 
 # Function to clean and preprocess text
- preprocess_text(text):
+def preprocess_text(text):
     text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
     text = text.lower()
     stop_words = set(stopwords.words('english'))
@@ -399,7 +399,7 @@ def custom_twitter_interaction_page():
 
 
         view_flagging_reasons = binary_result == 1
-        view_label = "View Flagging Reasons" if view_flagging_reasons else "Review Tweet Quality"
+        view_label = "View Flagging Reasons" if view_flagging_reasons else "Review Text Quality"
         view_predictions = st.checkbox(view_label, value=False)
 
         # Check if the user has entered any text
@@ -450,9 +450,9 @@ def custom_twitter_interaction_page():
 
 
 # Check the selected page and call the corresponding function
-if page == "Twitter Interaction":
+if page == "Server":
     twitter_interaction_page()
-elif page == "Custom Twitter Interaction":
+elif page == "Continual Learning":
     custom_twitter_interaction_page()
 
 
