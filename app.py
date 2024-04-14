@@ -301,7 +301,7 @@ st.markdown(
 
 # Streamlit UI
 st.sidebar.image(logo, caption=None, width=10, use_column_width=True)
-page = st.sidebar.radio("Select Page", ["Twitter Interaction", "Custom Twitter Interaction"])
+page = st.sidebar.radio("Select Page", ["Server", "Continual Learning"])
 # Receive messages from the Chrome extension
 @st.cache_data()
 def get_extension_feedback():
