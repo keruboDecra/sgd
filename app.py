@@ -352,9 +352,9 @@ def twitter_interaction_page():
         if offensive_words and (view_predictions or binary_result == 0):
             # Adjust the warning message based on cyberbullying classification
             if binary_result == 1:
-                st.warning(f"This tweet contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
+                st.warning(f"This text contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
             else:
-                st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+                st.warning(f"While this text is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -373,10 +373,10 @@ def twitter_interaction_page():
             if predicted_class != 'not_cyberbullying':
                 st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
             elif offensive_words and not view_predictions:
-                st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+                st.warning("While this text is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
                 # Display message before sending
-                st.success('This tweet is safe to send.')
+                st.success('Safe!')
 
  
 
@@ -438,11 +438,11 @@ def custom_twitter_interaction_page():
                     st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
                 else:
                     # Display message before sending
-                    st.success('This tweet is safe to send.')
+                    st.success('Safe!')
 
                     # Button to send tweet
-                    if st.button('Send Tweet'):
-                        st.success('Tweet Sent!')
+                    if st.button('Copy Text'):
+                        st.success('Copied!')
 
     else:
         st.warning("Please upload a CSV file to proceed.")
