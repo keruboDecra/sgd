@@ -38,7 +38,7 @@ session_state.user_input = ''
 session_state.chrome_extension_message = None
 
 # Function to clean and preprocess text
-def preprocess_text(text):
+ preprocess_text(text):
     text = re.sub(r'http\S+|www\S+|@\S+|#\S+|[^A-Za-z\s]', '', text)
     text = text.lower()
     stop_words = set(stopwords.words('english'))
